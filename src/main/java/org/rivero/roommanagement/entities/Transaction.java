@@ -1,4 +1,4 @@
-package org.rivero.roommanagement;
+package org.rivero.roommanagement.entities;
 
 import org.springframework.stereotype.Component;
 
@@ -10,6 +10,7 @@ public class Transaction {
     String senderId;
     String id;
     String description;
+
     public Transaction(int moneyAmount, String receiverId, String senderId, String id, String description) {
         this.moneyAmount = moneyAmount;
         this.receiverId = receiverId;

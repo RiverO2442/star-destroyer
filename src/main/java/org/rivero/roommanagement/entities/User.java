@@ -1,11 +1,9 @@
-package org.rivero.roommanagement;
+package org.rivero.roommanagement.entities;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
