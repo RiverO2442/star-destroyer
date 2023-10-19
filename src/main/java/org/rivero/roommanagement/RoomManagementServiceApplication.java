@@ -11,21 +11,31 @@ import java.util.List;
 public class RoomManagementServiceApplication {
 	public static void main(String[] args) {
 		ApplicationContext app =  SpringApplication.run(RoomManagementServiceApplication.class, args);
-		Room myRoom = app.getBean(Room.class);
-		User userHao = new User("Hao", "HaoDz", 1);
-		User userLong = new User("Long", "LongDz", 1);
-		MoneyConsumeEvent event = userHao.createMoneyConsumeEvent(List.of(userHao.getId(), userLong.getId()));
-		event.accounting(List.of(userHao, userLong));
-		System.out.println(userHao);
-		System.out.println(userLong);
-	}
-}
+		MoneyConsumeEvent BHX_1 = new MoneyConsumeEvent("BHX 1", 100000, "Hao", List.of("Hao", "Long"), "Mua Do An" );
+		MoneyConsumeEventRepository moneyConsumeEventRepository = app.getBean(MoneyConsumeEventRepository.class);
+		UserRepository userRepository = app.getBean(UserRepository.class);
+//		moneyConsumeEventRepository.save(BHX_1);
+		List<MoneyConsumeEvent> listEvent =  moneyConsumeEventRepository.findAll();
+		List<User> listUser =  userRepository.findAll();
+		for(MoneyConsumeEvent event : listEvent){
+			event.accounting(listUser);
+			moneyConsumeEventRepository.save(event);
+		}
+		for(User user : listUser){
+			userRepository.save(user);
+		}
+		userRepository.findAll().forEach(System.out::println);
+//		moneyConsumeEventRepository.findAll().forEach(System.out::println);
+//		User userHao = new User("Hao", "HaoDz", 1);
+//		UserRepository userRepository = app.getBean(UserRepository.class);
+//		User userLong = userRepository.findByName("Long");
+//		userRepository.deleteById(userLong.getId());
+//		userRepository.findAll().forEach(System.out::println);
+//		MoneyConsumeEvent event = userHao.createMoneyConsumeEvent(List.of(userHao.getId(), userLong.getId()));
+//		event.accounting(List.of(userHao, userLong));
+//		System.out.println(userHaoDz);
+//		System.out.println(userLong);
 
-@Component
-class Room{
-	String id;
-	Room(){
-		this.id = "1";
 	}
 }
 
