@@ -1,37 +1,35 @@
-import { DefaultTheme, ThemeProvider } from "styled-components";
-import { darkTheme, lightTheme } from "./styles/theme.ts";
-
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import { FC } from "react";
-import GlobalStyles from "./styles/global.ts";
-import { TodoList } from "./components/TodoList.tsx";
-import styled from "styled-components";
+import styled, {DefaultTheme, ThemeProvider} from "styled-components";
+import {darkTheme, lightTheme} from "./styles/theme.ts";
+import {FC} from "react";
+import {TodoList} from "./components/TodoList.tsx";
 import useLocalStorage from "./hooks/useLocalStorage.ts";
+import DarkModeIcon from "@mui/icons-material/DarkMode"
+import GlobalStyles from "./styles/global.ts";
 
 const App: FC = () => {
-  const [theme, setTheme] = useLocalStorage<DefaultTheme>("theme", lightTheme);
+    const [theme, setTheme] = useLocalStorage<DefaultTheme>("theme", lightTheme);
 
-  const themeToggle = () => {
-    const newTheme = theme === lightTheme ? darkTheme : lightTheme;
-    setTheme(newTheme);
-  };
+    const themeToggle = () => {
+        const newTheme = theme === lightTheme ? darkTheme : lightTheme;
+        setTheme(newTheme);
+    };
 
-  return (
-    // <ThemeProvider theme={theme}>
-    //   <Header>📓 Todo List</Header>
-      <TodoList />
-      // {/*<Footer>*/}
-      // {/*  Double click on todo to edit <br />*/}
-      // {/*  <a target="_blank" href="https://www.maxim-grinev-resume.ru/">*/}
-      // {/*    © Maxim Grinev*/}
-      // {/*  </a>*/}
-      // {/*</Footer>*/}
-      // {/*<ThemeToggle onClick={themeToggle}>*/}
-      //   {/*<DarkModeIcon fontSize="medium" />*/}
-      // {/*</ThemeToggle>*/}
-      // {/*<GlobalStyles />*/}
-    // {/*</ThemeProvider>*/}
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <Header>📓 Todo List</Header>
+            <TodoList/>
+            <Footer>
+                Double click on todo to edit <br/>
+                <a target="_blank" href="https://www.maxim-grinev-resume.ru/">
+                    © TikTzuki
+                </a>
+            </Footer>
+            <ThemeToggle onClick={themeToggle}>
+                <DarkModeIcon fontSize="medium" />
+            </ThemeToggle>
+            <GlobalStyles />
+        </ThemeProvider>
+    );
 };
 
 export const AppContainer = styled.div`

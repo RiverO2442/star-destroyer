@@ -1,11 +1,114 @@
 import * as React from "react";
-import {FC, MutableRefObject, useEffect, useMemo, useRef, useState} from "react";
-import {absurd, Filter, ITodo} from "../types/todo.ts";
+import {FC, useEffect, useMemo, useRef, useState} from "react";
 import {mockTodos} from "../mock/mockTodos.ts";
 import {useTodos} from "../hooks/useTodos.ts";
 import {styled} from "styled-components";
 import {Container} from "@mui/material";
+import {absurd, Filter, ITodo} from "../types/todo.ts";
+import {TodoItem} from "./TodoItem.tsx";
 
+
+export const TodoList: FC = () => {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const [value, setValue] = useState("");
+    const [filter, setFilter] = useState<Filter>(Filter.all);
+
+    const {
+        todos,
+        addTodo,
+        toggleTodo,
+        editTodo,
+        removeTodo,
+        removeCompleted,
+        getItemsLeft,
+    } = useTodos(mockTodos);
+
+    const itemsLeft = getItemsLeft();
+
+    const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+        setValue(event.target.value);
+    };
+
+    const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
+        event
+    ) => {
+        if (event.key === "Enter" && value.trim() !== "") {
+            addTodo(value);
+            setValue("");
+        }
+    };
+    const filterButtons = Object.values(Filter).map((f) => (
+        <FilterButton
+            key={f}
+            onClick={() => handleChangeFilter(f)}
+            $isActive={f === filter}
+        >
+            {f}
+        </FilterButton>
+    ));
+
+    const handleChangeFilter = (filter: Filter) => {
+        setFilter(filter);
+    };
+    const filteredTodos = useMemo(
+        () =>
+            todos.filter((todo) => {
+                switch (filter) {
+                    case Filter.active:
+                        return !todo.completed;
+                    case Filter.completed:
+                        return todo.completed;
+                    case Filter.all:
+                        return true;
+                    default:
+                        return absurd(filter);
+                }
+            }),
+        [todos, filter]
+    );
+
+    useEffect(() => {
+
+    }, []);
+
+    return (
+        <TodoListContainer sx={{display: "flex"}} maxWidth="sm">
+            <Input
+                placeholder="Write your todos here..."
+                value={value}
+                onKeyDown={handleKeyDown}
+                onChange={handleChange}
+                ref={inputRef}
+            />
+
+            {filteredTodos &&
+                filteredTodos.map((todo: ITodo) => (
+                    <TodoItem
+                        toggleTodo={toggleTodo}
+                        editTodo={editTodo}
+                        removeTodo={removeTodo}
+                        key={todo.id}
+                        id={todo.id}
+                        name={todo.name}
+                        completed={todo.completed}
+                    />
+                ))}
+
+            <TodoFooter>
+                <ItemsLeft>{itemsLeft} item(s) left</ItemsLeft>
+                <FilterButtons>{filterButtons}</FilterButtons>
+                <ClearButton
+                    $isActive={false}
+                    $isVisible={filter !== Filter.active}
+                    onClick={removeCompleted}
+                >
+                    Clear Completed
+                </ClearButton>
+            </TodoFooter>
+        </TodoListContainer>
+    );
+};
 
 const TodoListContainer = styled(Container)`
   margin: 0 auto;
@@ -29,6 +132,22 @@ const Input = styled.input`
   background-color: ${(props) => props.theme.colors.secondary};
 `;
 
+const FilterButton = styled.button<{ $isActive: boolean }>`
+  background-color: transparent;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 12px;
+
+  border: ${(props) =>
+          props.$isActive ? `1px solid ${props.theme.colors.primary}` : "none"};
+  border-radius: 10px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+`;
 const FilterButtons = styled.div`
   display: flex;
 `;
@@ -46,97 +165,8 @@ const TodoFooter = styled.div`
 const ItemsLeft = styled.span`
   font-size: 12px;
 `;
-
-
-export const TodoList: FC = () => {
-  const inputRef: MutableRefObject<HTMLInputElement | null> = useRef<>(null);
-
-  const [value, setValue] = useState("");
-  const [filter, setFilter] = useState<Filter>(Filter.all);
-
-  const {
-    todos,
-    addTodo,
-    toggleTodo,
-    editTodo,
-    removeTodo,
-    removeCompleted,
-    getItemsLeft,
-  } = useTodos(mockTodos);
-
-  const itemsLeft = getItemsLeft();
-
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setValue(event.target.value);
-  };
-
-  const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (
-      event
-  ) => {
-    if (event.key === "Enter" && value.trim() !== "") {
-      addTodo(value);
-      setValue("");
-    }
-  };
-
-  const handleChangeFilter = (filter: Filter) => {
-    setFilter(filter);
-  };
-
-  const filteredTodos = useMemo(
-      () =>
-          todos.filter((todo) => {
-            switch (filter) {
-              case Filter.active:
-                return !todo.completed;
-              case Filter.completed:
-                return todo.completed;
-              case Filter.all:
-                return true;
-              default:
-                return absurd(filter);
-            }
-          }),
-      [todos, filter]
-  );
-
-  useEffect(() => {
-    inputRef.current?.focus({});
-  }, []);
-
-  return (
-      <TodoListContainer sx={{display: "flex"}} maxWidth="sm">
-        <Input
-            placeholder="Write your todos here..."
-            value={value}
-            onKeyDown={handleKeyDown}
-            onChange={handleChange}
-            ref={inputRef}
-        />
-
-        {filteredTodos &&
-            filteredTodos.map((todo: ITodo) => (
-                <TodoItem
-                    toggleTodo={toggleTodo}
-                    editTodo={editTodo}
-                    removeTodo={removeTodo}
-                    key={todo.id}
-                    id={todo.id}
-                    name={todo.name}
-                    completed={todo.completed}
-                />
-            ))}
-
-        <TodoFooter>
-          <ItemsLeft>{itemsLeft} item(s) left</ItemsLeft>
-          <ClearButton
-              $isActive={false}
-              $isVisible={filter === Filter.active ? false : true}
-              onClick={removeCompleted}
-          >
-            Clear Completed
-          </ClearButton>
-        </TodoFooter>
-      </TodoListContainer>
-  );
-};
+const ClearButton = styled(FilterButton)<{ $isVisible: boolean }>`
+  font-size: 12px;
+  background-color: transparent;
+  visibility: ${(props) => (props.$isVisible ? `visible` : "hidden")};
+`;
