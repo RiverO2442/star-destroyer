@@ -7,10 +7,10 @@ import DarkModeIcon from "@mui/icons-material/DarkMode"
 import GlobalStyles from "./styles/global.ts";
 
 const App: FC = () => {
-    const [theme, setTheme] = useLocalStorage<DefaultTheme>("theme", lightTheme);
+    const [theme, setTheme] = useLocalStorage<DefaultTheme>("theme", darkTheme);
 
     const themeToggle = () => {
-        const newTheme = theme === lightTheme ? darkTheme : lightTheme;
+        const newTheme = theme === darkTheme ? lightTheme : darkTheme;
         setTheme(newTheme);
     };
 
@@ -25,9 +25,9 @@ const App: FC = () => {
                 </a>
             </Footer>
             <ThemeToggle onClick={themeToggle}>
-                <DarkModeIcon fontSize="medium" />
+                <DarkModeIcon fontSize="medium"/>
             </ThemeToggle>
-            <GlobalStyles />
+            <GlobalStyles/>
         </ThemeProvider>
     );
 };
