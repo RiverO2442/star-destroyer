@@ -1,15 +1,15 @@
 import * as React from "react";
 import {FC, useEffect, useMemo, useRef, useState} from "react";
-import {mockTodos} from "../mock/mockTodos.ts";
 import {useTodos} from "../hooks/useTodos.ts";
 import {styled} from "styled-components";
 import {Container} from "@mui/material";
 import {absurd, Filter, ITodo} from "../types/todo.ts";
 import {TodoItem} from "./TodoItem.tsx";
+import {todoApi} from "../hooks/dataFetcher.ts";
 
 
 export const TodoList: FC = () => {
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     const [value, setValue] = useState("");
     const [filter, setFilter] = useState<Filter>(Filter.all);
@@ -22,7 +22,7 @@ export const TodoList: FC = () => {
         removeTodo,
         removeCompleted,
         getItemsLeft,
-    } = useTodos(mockTodos);
+    } = useTodos([]);
 
     const itemsLeft = getItemsLeft();
 
@@ -38,7 +38,7 @@ export const TodoList: FC = () => {
             setValue("");
         }
     };
-    const filterButtons = Object.values(Filter).map((f) => (
+    const filterButtons = Object.values(Filter).map((f:Filter) => (
         <FilterButton
             key={f}
             onClick={() => handleChangeFilter(f)}
@@ -69,7 +69,10 @@ export const TodoList: FC = () => {
     );
 
     useEffect(() => {
-
+        todoApi.get("/todos")
+            .then(data=>{
+                console.log(data)
+            });
     }, []);
 
     return (

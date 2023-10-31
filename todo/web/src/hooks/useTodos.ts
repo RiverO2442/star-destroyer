@@ -1,6 +1,6 @@
 import {ITodo} from "../types/todo.ts";
 import {useState} from "react";
-import axios from "axios";
+import {todoApi} from "./dataFetcher.ts";
 
 export function useTodos(initialTodos: ITodo[]) {
     const [todos, setTodos] = useState<ITodo[]>(initialTodos);
@@ -11,7 +11,7 @@ export function useTodos(initialTodos: ITodo[]) {
             name,
             completed: false,
         };
-        axios.post("/todos", newTodo)
+        todoApi.post("/todos", newTodo)
             .then(value => {
                 console.log(value)
                 setTodos((prevState) => [...prevState, newTodo]);

@@ -1,4 +1,6 @@
 spring:
+  main:
+    web-application-type: reactive
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
@@ -7,3 +9,10 @@ spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
     url: jdbc:sqlite:todo-db
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+logging:
+  level:
+    web: debug
