@@ -1,4 +1,4 @@
-package org.rivero.todo.entities
+package org.tiktzuki.todo.entities
 
 import jakarta.persistence.*
 
@@ -8,7 +8,7 @@ class Todo(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Basic
         val id: Long,
-        val title: String,
-        val description: String
+        var title: String,
+        var description: String
 ) {
 }

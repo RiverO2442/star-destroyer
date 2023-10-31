@@ -1,6 +1,6 @@
-package org.rivero.todo.repositories
+package org.tiktzuki.todo.repositories
 
-import org.rivero.todo.entities.Todo
+import org.tiktzuki.todo.entities.Todo
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface TodoRepository : JpaRepository<Todo, Long> {

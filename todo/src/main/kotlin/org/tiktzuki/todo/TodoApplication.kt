@@ -1,4 +1,4 @@
-package org.rivero.todo
+package org.tiktzuki.todo
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
