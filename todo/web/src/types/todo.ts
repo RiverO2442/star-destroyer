@@ -1,13 +1,15 @@
 export interface ITodo {
-  id: number;
-  name: string;
-  completed: boolean;
+    id: string ;
+    title: string;
+    completed: boolean;
+    description: string | undefined;
 }
 
 export enum Filter {
-  all = "all",
-  active = "active",
-  completed = "completed",
+    all = "all",
+    active = "active",
+    completed = "completed",
 }
 
-export const absurd = (_value: never): any => {};
+export const absurd = (_value: never): any => {
+};

@@ -6,6 +6,8 @@ import {Container} from "@mui/material";
 import {absurd, Filter, ITodo} from "../types/todo.ts";
 import {TodoItem} from "./TodoItem.tsx";
 import {todoApi} from "../hooks/dataFetcher.ts";
+import {AxiosResponse} from "axios";
+import {Page} from "../types/page.ts";
 
 
 export const TodoList: FC = () => {
@@ -16,6 +18,7 @@ export const TodoList: FC = () => {
 
     const {
         todos,
+        setTodos,
         addTodo,
         toggleTodo,
         editTodo,
@@ -38,7 +41,7 @@ export const TodoList: FC = () => {
             setValue("");
         }
     };
-    const filterButtons = Object.values(Filter).map((f:Filter) => (
+    const filterButtons = Object.values(Filter).map((f: Filter) => (
         <FilterButton
             key={f}
             onClick={() => handleChangeFilter(f)}
@@ -70,10 +73,10 @@ export const TodoList: FC = () => {
 
     useEffect(() => {
         todoApi.get("/todos")
-            .then(data=>{
-                console.log(data)
+            .then((resp: AxiosResponse<Page<ITodo[]>, unknown>) => {
+                setTodos(resp.data.content)
             });
-    }, []);
+    }, [setTodos]);
 
     return (
         <TodoListContainer sx={{display: "flex"}} maxWidth="sm">
@@ -93,9 +96,9 @@ export const TodoList: FC = () => {
                         removeTodo={removeTodo}
                         key={todo.id}
                         id={todo.id}
-                        name={todo.name}
+                        title={todo.title}
                         completed={todo.completed}
-                    />
+                        description={todo.description}/>
                 ))}
 
             <TodoFooter>

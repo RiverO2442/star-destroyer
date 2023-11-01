@@ -3,27 +3,27 @@ import { ITodo } from '../types/todo.ts';
 export const mockTodos: ITodo[] = [
   {
     id: 1,
-    name: '🏪 To buy products ',
+    title: '🏪 To buy products ',
     completed: false,
   },
   {
     id: 2,
-    name: '🧽 To clean the house',
+    title: '🧽 To clean the house',
     completed: false,
   },
   {
     id: 3,
-    name: '🌼 To water flowers',
+    title: '🌼 To water flowers',
     completed: true,
   },
   {
     id: 4,
-    name: '🐕 To feed the dog',
+    title: '🐕 To feed the dog',
     completed: false,
   },
   {
     id: 5,
-    name: '⚛️ To code a react app',
+    title: '⚛️ To code a react app',
     completed: true,
   },
 ];
