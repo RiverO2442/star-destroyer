@@ -2,6 +2,7 @@ import {ITodo} from "../types/todo.ts";
 import {useState} from "react";
 import {todoApi} from "./dataFetcher.ts";
 import {AxiosResponse} from "axios";
+import {Page} from "../types/page.ts";
 
 export function useTodos(initialTodos: ITodo[]) {
     const [todos, setTodos] = useState<ITodo[]>(initialTodos);
@@ -24,6 +25,11 @@ export function useTodos(initialTodos: ITodo[]) {
         setTodos((prevState) =>
             prevState.map((todo) => {
                 if (todo.id === id) {
+                    todoApi.put(`/todos/${id}`, {
+                        title: todo.title,
+                        description: todo.description,
+                        completed: !todo.completed
+                    }).then()
                     return {
                         ...todo,
                         completed: !todo.completed,
@@ -74,7 +80,10 @@ export function useTodos(initialTodos: ITodo[]) {
     };
 
     const removeCompleted = (): void => {
-        setTodos((prevState) => prevState.filter((todo) => !todo.completed));
+        todoApi.get("/todos?completed=false")
+            .then((resp: AxiosResponse<Page<ITodo[]>, undefined>) => {
+                setTodos(resp.data.content);
+            })
     };
 
     return {
