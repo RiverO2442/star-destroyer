@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
-import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import org.tiktzuki.todo.dto.CreateTodoRequest
@@ -25,9 +23,9 @@ class TodoController @Autowired constructor(
     companion object : KLogging()
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: UUID): ResponseEntity<Todo> {
+    fun get(@PathVariable id: UUID): Mono<Todo> {
         return todoRepository.findById(id)
-                .map(::ok)
+                .map { Mono.just(it) }
                 .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
     }
 
@@ -37,14 +35,16 @@ class TodoController @Autowired constructor(
     }
 
     @PostMapping
-    fun post(@RequestBody todoRequest: CreateTodoRequest): ResponseEntity<Todo> {
+    @ResponseStatus(HttpStatus.CREATED)
+    fun post(@RequestBody todoRequest: CreateTodoRequest): Mono<Todo> {
         logger.info { todoRequest }
         val todo = todoRepository.save(Todo(title = todoRequest.title))
-        return ResponseEntity(todo, HttpStatus.CREATED)
+        return Mono.just(todo)
     }
 
     @PutMapping("/{id}")
-    fun put(@PathVariable id: UUID, @RequestBody updateTodo: UpdateTodoRequest): ResponseEntity<Void> {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun put(@PathVariable id: UUID, @RequestBody updateTodo: UpdateTodoRequest): Mono<Void> {
         todoRepository.findById(id)
                 .ifPresentOrElse({
                     it.description = updateTodo.description
@@ -52,12 +52,12 @@ class TodoController @Autowired constructor(
                     it.completed = updateTodo.completed
                     todoRepository.save(it)
                 }, { throw ResponseStatusException(HttpStatus.NOT_FOUND) })
-        return ResponseEntity.noContent().build()
+        return Mono.empty()
     }
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: UUID): ResponseEntity<Void> {
+    fun delete(@PathVariable id: UUID): Mono<Void> {
         todoRepository.deleteById(id)
-        return ResponseEntity.noContent().build()
+        return Mono.empty()
     }
 }
