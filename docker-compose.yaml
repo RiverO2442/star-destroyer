@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+  todo-web:
+    image: tiktzuki/todo-web:latest
+    ports:
+      - "18081:80"
+  todo-api:
+    image: tiktzuki/todo:latest
+    environment:
+      SERVER_PORT: 18080
+      SPRING_DATASOURCE_URL: jdbc:sqlite:/home/tik/Desktop/repositories/star-destroyer/todo-db
+    ports:
+      - "18080:18080"
+    volumes:
+      - ./database:/database
