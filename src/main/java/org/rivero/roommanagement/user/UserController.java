@@ -1,12 +1,10 @@
-package org.rivero.roommanagement.controllers;
+package org.rivero.roommanagement.user;
 
-import org.rivero.roommanagement.entities.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @RequestMapping("/api/v1")

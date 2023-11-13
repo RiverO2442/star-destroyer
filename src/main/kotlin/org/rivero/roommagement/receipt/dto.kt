@@ -4,8 +4,8 @@ import java.math.BigDecimal
 import java.net.URL
 
 data class CreateReceiptCommand(
-    val creatorId: String,
-    val consumerIds: List<String>,
-    val imageUrl: URL,
-    val totalAmountToPay: BigDecimal
+        val creatorId: String,
+        val consumerIds: List<String>,
+        val imageUrl: URL,
+        val totalAmountToPay: BigDecimal
 )
