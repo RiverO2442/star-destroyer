@@ -11,15 +11,11 @@ import java.util.UUID;
 @Setter
 @ToString
 public class User{
-    String name;
     String id;
-    String passwordHash;
+    String name;
     int balance;
-    int role;
     User(String name, String passwordHash, int role){
         this.name = name;
-        this.passwordHash = passwordHash;
-        this.role = role;
         this.balance = 0;
         this.id = UUID.randomUUID().toString();
     }
