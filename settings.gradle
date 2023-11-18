@@ -7,4 +7,4 @@
 //}
 rootProject.name = 'room-management-service'
 
-include "todo"
+include "todo","room-manager"

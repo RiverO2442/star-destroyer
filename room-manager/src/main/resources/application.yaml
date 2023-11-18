@@ -1,0 +1,13 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${CLIENT_ID:74de25564b94ce99a0f3}
+            client-secret: ${CLIENT_SECRET:1a579834df97028c30f66fa09f4097098a20f95f}
+            redirect-uri: http://127.0.0.1:18080/login/oauth2/code/github
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/room-manager}
+    username: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
