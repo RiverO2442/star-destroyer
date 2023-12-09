@@ -2,6 +2,8 @@ import ReactDOM from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import App from "./App.tsx";
 import AuthCodeCallback from "./components/AuthCodeCallback.tsx";
+import {Provider} from "react-redux";
+import store from "./redux/store.ts";
 
 const router = createBrowserRouter([
     {
@@ -15,5 +17,7 @@ const router = createBrowserRouter([
 ])
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <RouterProvider router={router}/>
+    <Provider store={store}>
+        <RouterProvider router={router}/>
+    </Provider>
 );
