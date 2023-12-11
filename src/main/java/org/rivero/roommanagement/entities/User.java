@@ -16,12 +16,12 @@ public class User{
     String passwordHash;
     int balance;
     int role;
-    User(String name, String passwordHash, int role){
+    public User(String id, String name, String passwordHash, int role){
         this.name = name;
         this.passwordHash = passwordHash;
         this.role = role;
         this.balance = 0;
-        this.id = UUID.randomUUID().toString();
+        this.id = id;
     }
     User getUserDetail(){
         return this;

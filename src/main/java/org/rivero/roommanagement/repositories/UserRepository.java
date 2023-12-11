@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.UUID;
 
-public class MoneyConsumeEventRepository {
+public class UserRepository {
     public ResultSet getList(Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery("SELECT * FROM user_tbl");
