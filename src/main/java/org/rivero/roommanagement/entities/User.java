@@ -35,10 +35,10 @@ public class User{
     void increaseUserBalance(int amount){
         this.balance = this.balance + amount;
     }
-    MoneyConsumeEvent createMoneyConsumeEvent(List<String> consumerList){
-        int price = 1000;
-        MoneyConsumeEvent event = new MoneyConsumeEvent("Mua do an BHX", price, this.id, consumerList, "mua com trung ca thit" );
-        this.balance = this.balance + price;
-        return event;
-    }
+//    MoneyConsumeEvent createMoneyConsumeEvent(List<String> consumerList){
+//        int price = 1000;
+//        MoneyConsumeEvent event = new MoneyConsumeEvent("Mua do an BHX", price, this.id, consumerList, "mua com trung ca thit" );
+//        this.balance = this.balance + price;
+//        return event;
+//    }
 }
