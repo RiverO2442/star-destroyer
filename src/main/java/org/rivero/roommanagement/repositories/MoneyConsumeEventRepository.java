@@ -1,7 +1,7 @@
 package org.rivero.roommanagement.repositories;
 
+import org.rivero.roommanagement.dtos.ReceiptDTO;
 import org.rivero.roommanagement.entities.MoneyConsumeEvent;
-import org.rivero.roommanagement.entities.ReceiptConsumer;
 import org.rivero.roommanagement.request.ReceiptCreateRequest;
 import org.rivero.roommanagement.request.ReceiptUpdateRequest;
 import org.rivero.roommanagement.services.ReceiptConsumerService;
@@ -10,22 +10,32 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @Repository
 public class MoneyConsumeEventRepository {
     public List<MoneyConsumeEvent> getList(Connection connection) {
         try {
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM receipt");
+            ResultSet rs = statement.executeQuery("SELECT * FROM receipt left join receipt_consumer rc on receipt.id = rc.receiptid");
             List<MoneyConsumeEvent> receipts = new ArrayList<MoneyConsumeEvent>();
-            ArrayList<String> consumerList = new ArrayList<String>();
             while (rs.next()) {
+                AtomicBoolean isExisted = new AtomicBoolean(false);
                 String receipt_id = rs.getString("id");
                 String buyerId = rs.getString("buyerid");
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 int moneyAmount = Integer.parseInt(rs.getString("moneyamount"));
-                receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerList, description));
+                String consumerid = rs.getString("consumerid");
+                receipts.forEach(rc -> {
+                    if(rc.getId().equals(receipt_id)){
+                        rc.getConsumerList().add(consumerid);
+                    }
+                    isExisted.set(true);
+                });
+                if(!isExisted.get()){
+                    receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerid, description));
+                }
             }
             return receipts;
         } catch (SQLException e) {
@@ -47,7 +57,7 @@ public class MoneyConsumeEventRepository {
         }
     }
 
-    public MoneyConsumeEvent getOne(Connection connection, String id, ReceiptConsumerService receiptConsumerService) {
+    public ReceiptDTO getOne(Connection connection, String id, ReceiptConsumerService receiptConsumerService) {
         try {
             PreparedStatement preparedStatement = null;
             preparedStatement = connection.prepareStatement("SELECT * FROM receipt WHERE id = ?");
@@ -64,7 +74,7 @@ public class MoneyConsumeEventRepository {
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 int moneyAmount = Integer.parseInt(rs.getString("moneyamount"));
-                return new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerIds, description);
+                return new ReceiptDTO(name, moneyAmount, buyerId, consumerIds, receipt_id, description);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

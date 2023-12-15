@@ -22,7 +22,9 @@ public class UserRepository {
                 String id = rs.getString("id");
                 String username = rs.getString("username");
                 String password = rs.getString("passwordHash");
-                users.add(new User(id, username, password, 0));
+                int balance = rs.getInt("balance");
+                int debt = rs.getInt("debt");
+                users.add(new User(id, username, password, 0, balance, debt));
             }
             return users;
         } catch (SQLException e) {
@@ -63,7 +65,9 @@ public class UserRepository {
                 String userId = rs.getString("id");
                 String username = rs.getString("username");
                 String password = rs.getString("passwordHash");
-                return new User(userId, username, password, 0);
+                int balance = rs.getInt("balance");
+                int debt = rs.getInt("debt");
+                return new User(id, username, password, 0, balance, debt);
             }
             return null;
         } catch (SQLException e) {

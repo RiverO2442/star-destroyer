@@ -23,7 +23,7 @@ public class UserController {
         return userService.getAllUser();
     }
 
-    @PostMapping("/user")
+    @PostMapping("/users")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         userService.register(user);
         return ResponseEntity.ok().body(user);
@@ -35,11 +35,11 @@ public class UserController {
 
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable(name = "userId") String userId) {
         if (userService.getUserById(userId) != null)
             return ResponseEntity.ok().body(userService.getUserById(userId));
-        return ResponseEntity.status(HttpStatusCode.valueOf(204)).build();
+        return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
     }
 
 //    @PutMapping("/user/{userId}")

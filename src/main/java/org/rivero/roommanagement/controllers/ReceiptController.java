@@ -30,34 +30,34 @@ public class ReceiptController {
         return receiptService.getAllReceipt().stream().map(receiptDTOMapper).collect(Collectors.toList());
     }
 
-    @PutMapping("/receipt")
+    @PutMapping("/receipts")
     public ResponseEntity<String> updateReceipt(@RequestBody ReceiptUpdateRequest request){
         receiptService.updateOne(request);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/receipt")
+    @PostMapping("/receipts")
     public ResponseEntity<String> addReceipt(@RequestBody ReceiptCreateRequest request) {
         receiptService.create(request);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).build();
     }
 
-    @GetMapping("/receipt/{receiptId}")
+    @GetMapping("/receipts/{receiptId}")
     public ResponseEntity<ReceiptDTO> getReceiptById(@PathVariable(name = "receiptId") String receiptId) {
-        MoneyConsumeEvent receipt = receiptService.getReceiptById(receiptId);
+        ReceiptDTO receipt = receiptService.getReceiptById(receiptId);
         if (receiptService.getReceiptById(receiptId) != null)
             return ResponseEntity.ok().body(new ReceiptDTO(
-                    receipt.getName(),
-                    receipt.getMoneyAmount(),
-                    receipt.getBuyerId(),
-                    receipt.getConsumerList(),
-                    receipt.getId(),
-                    receipt.getDescription()
+                    receipt.name(),
+                    receipt.moneyAmount(),
+                    receipt.buyerId(),
+                    receipt.consumerList(),
+                    receipt.id(),
+                    receipt.description()
             ));
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
     }
 
-    @DeleteMapping("/receipt/{receiptId}")
+    @DeleteMapping("/receipts/{receiptId}")
     public ResponseEntity<Void> deleteReceiptById(@PathVariable(name = "receiptId") String receiptId) {
         receiptService.deleteOne(receiptId);
         return ResponseEntity.noContent().build();

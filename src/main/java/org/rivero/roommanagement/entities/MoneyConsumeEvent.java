@@ -3,6 +3,7 @@ package org.rivero.roommanagement.entities;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ public class MoneyConsumeEvent {
     String name;
     int moneyAmount;
     String buyerId;
-    List<String> consumerList;
+    List<String> consumerList = new ArrayList<>();
     String id;
     String description;
 
@@ -22,6 +23,14 @@ public class MoneyConsumeEvent {
         this.moneyAmount = moneyAmount;
         this.buyerId = buyerId;
         this.consumerList = consumerList;
+        this.description = description;
+    }
+    public MoneyConsumeEvent(String id, String name,int moneyAmount, String buyerId, String consumerList, String description) {
+        this.id = id;
+        this.name = name;
+        this.moneyAmount = moneyAmount;
+        this.buyerId = buyerId;
+        this.consumerList.add(consumerList);
         this.description = description;
     }
     void accounting(List<User> userList){
