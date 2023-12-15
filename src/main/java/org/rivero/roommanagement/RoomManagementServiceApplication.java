@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @SpringBootApplication
 public class RoomManagementServiceApplication {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
 		ApplicationContext app =  SpringApplication.run(RoomManagementServiceApplication.class, args);
     }
 }

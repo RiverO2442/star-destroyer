@@ -1,51 +1,40 @@
 package org.rivero.roommanagement.services;
 
+import lombok.RequiredArgsConstructor;
 import org.rivero.roommanagement.entities.User;
 import org.rivero.roommanagement.repositories.DBConnectionManager;
 import org.rivero.roommanagement.repositories.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-
+@RequiredArgsConstructor
+@Service
 public class UserService {
-    UserRepository userRepository = new UserRepository();
+    private  final UserRepository userRepository = new UserRepository();
     DBConnectionManager dbConnectionManager = new DBConnectionManager();
     Connection connection = dbConnectionManager.connect();
 
-    public String login(User user) throws SQLException {
+    public String login(User user) {
         if (DigestUtils.md5DigestAsHex(user.getPasswordHash().getBytes(StandardCharsets.UTF_8)).equals(userRepository.getPasswordHash(connection, user.getName())))
-            return DigestUtils.md5DigestAsHex("Login Completed".getBytes(StandardCharsets.UTF_8));
-        else return "Login Failed";
+            return DigestUtils.md5DigestAsHex(user.getName().getBytes(StandardCharsets.UTF_8));
+        else throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "username or password doesnt matched", null);
     }
 
-    public User getUserById(String id) throws SQLException {
-        ResultSet rs = userRepository.getOne(connection, id);
-        if (rs.next()){
-            String userId = rs.getString("id");
-            String username = rs.getString("username");
-            String password = rs.getString("passwordHash");
-            return  new User(userId, username, password, 0);
-        }
-        else return null;
-    }
-    public List<User> getAllUser() throws SQLException {
-        ResultSet rs = userRepository.getList(connection);
-        List<User> users = new ArrayList<>();
-        while (rs.next()){
-            String id = rs.getString("id");
-            String username = rs.getString("username");
-            String password = rs.getString("passwordHash");
-            users.add(new User(id, username, password, 0));
-        }
-        return users;
+    public User getUserById(String id) {
+        return userRepository.getOne(connection, id);
     }
 
-    public String register(User user) throws SQLException {
+    public List<User> getAllUser() {
+        return userRepository.getList(connection);
+    }
+
+    public String register(User user) {
         if (userRepository.getPasswordHash(connection, user.getName()).isEmpty()) {
             userRepository.insert(connection, user);
             return "New User Registered";

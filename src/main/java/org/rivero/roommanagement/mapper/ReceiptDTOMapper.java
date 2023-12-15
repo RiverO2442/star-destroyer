@@ -3,6 +3,8 @@ package org.rivero.roommanagement.mapper;
 import org.rivero.roommanagement.dtos.ReceiptDTO;
 import org.rivero.roommanagement.entities.MoneyConsumeEvent;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;

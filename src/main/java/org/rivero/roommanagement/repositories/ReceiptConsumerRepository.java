@@ -1,48 +1,69 @@
 package org.rivero.roommanagement.repositories;
 
-import org.rivero.roommanagement.entities.MoneyConsumeEvent;
 import org.rivero.roommanagement.entities.ReceiptConsumer;
-import org.rivero.roommanagement.request.ReceiptCreateRequest;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.UUID;
-
+@Repository
 public class ReceiptConsumerRepository {
-    public ResultSet getListByUserId(Connection connection, String id) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE consumerid = ?");
-        preparedStatement.setString(1, id);
-        return preparedStatement.executeQuery();
+    public ArrayList<ReceiptConsumer> getListByUserId(Connection connection, String id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE consumerid = ?");
+            preparedStatement.setString(1, id);
+            ArrayList<ReceiptConsumer> receiptConsumersList = new ArrayList<>();
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                String rc_id = rs.getString("id");
+                String consumerId = rs.getString("consumerid");
+                String receiptId = rs.getString("receiptid");
+                receiptConsumersList.add(new ReceiptConsumer(rc_id, receiptId, consumerId));
+            }
+            return receiptConsumersList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public ResultSet getListByReceiptId(Connection connection, String id) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE receiptid = ?");
-        preparedStatement.setString(1, id);
-        return preparedStatement.executeQuery();
+    public ArrayList<ReceiptConsumer> getListByReceiptId(Connection connection, String id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE receiptid = ?");
+            preparedStatement.setString(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            ArrayList<ReceiptConsumer> receiptConsumersList = new ArrayList<>();
+            while (rs.next()) {
+                String rc_id = rs.getString("id");
+                String consumerId = rs.getString("consumerid");
+                String receiptId = rs.getString("receiptid");
+                receiptConsumersList.add(new ReceiptConsumer(rc_id, receiptId, consumerId));
+            }
+            return receiptConsumersList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void insert(Connection connection, ReceiptConsumer receiptConsumer) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO receipt_consumer VALUES (?, ?, ?)");
-        preparedStatement.setString(1, UUID.randomUUID().toString());
-        preparedStatement.setString(2, receiptConsumer.getConsumerId());
-        preparedStatement.setString(3, receiptConsumer.getReceiptId());
-        preparedStatement.execute();
+    public void insert(Connection connection, ReceiptConsumer receiptConsumer) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO receipt_consumer VALUES (?, ?, ?)");
+            preparedStatement.setString(1, UUID.randomUUID().toString());
+            preparedStatement.setString(2, receiptConsumer.getConsumerId());
+            preparedStatement.setString(3, receiptConsumer.getReceiptId());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-//    public ResultSet getOne(Connection connection, String id) throws SQLException {
-//        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt WHERE id = ?");
-//        preparedStatement.setString(1, id);
-//        ResultSet rs;
-//        rs = preparedStatement.executeQuery();
-//        return rs;
-//    }
-//
-//    public void insert(Connection connection, MoneyConsumeEvent receipt) throws SQLException {
-//        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO receipt VALUES (?, ?, ?, ?, ?)");
-//        preparedStatement.setString(1, UUID.randomUUID().toString());
-//        preparedStatement.setString(2, String.valueOf(receipt.getMoneyAmount()));
-//        preparedStatement.setString(2, receipt.getBuyerId());
-//        preparedStatement.setString(2, receipt.getName());
-//        preparedStatement.setString(2, receipt.getDescription());
-//        preparedStatement.execute();
-//    }
+    public void deleteOne(Connection connection, String id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM receipt_consumer WHERE id = ? ");
+            preparedStatement.setString(1, id);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
