@@ -15,13 +15,15 @@ public class User{
     String id;
     String passwordHash;
     int balance;
+    int debt;
     int role;
-    User(String name, String passwordHash, int role){
+    public User(String id, String name, String passwordHash, int role, int balance, int debt){
         this.name = name;
         this.passwordHash = passwordHash;
         this.role = role;
-        this.balance = 0;
-        this.id = UUID.randomUUID().toString();
+        this.balance = balance;
+        this.debt = debt;
+        this.id = id;
     }
     User getUserDetail(){
         return this;
@@ -35,10 +37,10 @@ public class User{
     void increaseUserBalance(int amount){
         this.balance = this.balance + amount;
     }
-    MoneyConsumeEvent createMoneyConsumeEvent(List<String> consumerList){
-        int price = 1000;
-        MoneyConsumeEvent event = new MoneyConsumeEvent("Mua do an BHX", price, this.id, consumerList, "mua com trung ca thit" );
-        this.balance = this.balance + price;
-        return event;
-    }
+//    MoneyConsumeEvent createMoneyConsumeEvent(List<String> consumerList){
+//        int price = 1000;
+//        MoneyConsumeEvent event = new MoneyConsumeEvent("Mua do an BHX", price, this.id, consumerList, "mua com trung ca thit" );
+//        this.balance = this.balance + price;
+//        return event;
+//    }
 }
