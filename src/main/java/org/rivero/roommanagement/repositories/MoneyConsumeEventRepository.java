@@ -2,14 +2,16 @@ package org.rivero.roommanagement.repositories;
 
 import org.rivero.roommanagement.dtos.ReceiptDTO;
 import org.rivero.roommanagement.entities.MoneyConsumeEvent;
+import org.rivero.roommanagement.entities.ReceiptConsumer;
 import org.rivero.roommanagement.request.ReceiptCreateRequest;
 import org.rivero.roommanagement.request.ReceiptUpdateRequest;
-import org.rivero.roommanagement.services.ReceiptConsumerService;
+import org.rivero.roommanagement.services.ReceiptService;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Repository
@@ -57,7 +59,7 @@ public class MoneyConsumeEventRepository {
         }
     }
 
-    public ReceiptDTO getOne(Connection connection, String id, ReceiptConsumerService receiptConsumerService) {
+    public ReceiptDTO getOne(Connection connection, String id, ReceiptService receiptService) {
         try {
             PreparedStatement preparedStatement = null;
             preparedStatement = connection.prepareStatement("SELECT * FROM receipt WHERE id = ?");
@@ -65,7 +67,7 @@ public class MoneyConsumeEventRepository {
             ResultSet rs;
             rs = preparedStatement.executeQuery();
             ArrayList<String> consumerIds = new ArrayList<>();
-            receiptConsumerService.getByReceiptId(id).forEach(data -> {
+            receiptService.getByReceiptId(id).forEach(data -> {
                 consumerIds.add(data.getConsumerId());
             });
             while (rs.next()) {
@@ -100,6 +102,65 @@ public class MoneyConsumeEventRepository {
     public void deleteOne(Connection connection, String id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM receipt WHERE id = ? ");
+            preparedStatement.setString(1, id);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public ArrayList<ReceiptConsumer> getListReceiptConsumerByUserId(Connection connection, String id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE consumerid = ?");
+            preparedStatement.setString(1, id);
+            ArrayList<ReceiptConsumer> receiptConsumersList = new ArrayList<>();
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                String rc_id = rs.getString("id");
+                String consumerId = rs.getString("consumerid");
+                String receiptId = rs.getString("receiptid");
+                receiptConsumersList.add(new ReceiptConsumer(rc_id, receiptId, consumerId));
+            }
+            return receiptConsumersList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<ReceiptConsumer> getListReceiptConsumerByReceiptId(Connection connection, String id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE receiptid = ?");
+            preparedStatement.setString(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            ArrayList<ReceiptConsumer> receiptConsumersList = new ArrayList<>();
+            while (rs.next()) {
+                String rc_id = rs.getString("id");
+                String consumerId = rs.getString("consumerid");
+                String receiptId = rs.getString("receiptid");
+                receiptConsumersList.add(new ReceiptConsumer(rc_id, receiptId, consumerId));
+            }
+            return receiptConsumersList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void insertReceiptConsumer(Connection connection, ReceiptConsumer receiptConsumer) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO receipt_consumer VALUES (?, ?, ?)");
+            preparedStatement.setString(1, UUID.randomUUID().toString());
+            preparedStatement.setString(2, receiptConsumer.getConsumerId());
+            preparedStatement.setString(3, receiptConsumer.getReceiptId());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteOneReceiptConsumer(Connection connection, String id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM receipt_consumer WHERE id = ? ");
             preparedStatement.setString(1, id);
             preparedStatement.execute();
         } catch (SQLException e) {
