@@ -45,6 +45,36 @@ public class MoneyConsumeEventRepository {
         }
     }
 
+    public List<MoneyConsumeEvent> getListByUserId(Connection connection, String userId) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM receipt left join receipt_consumer rc on receipt.id = rc.receiptid WHERE buyerid = ?");
+            statement.setString(1, userId);
+            ResultSet rs = statement.executeQuery();
+            List<MoneyConsumeEvent> receipts = new ArrayList<MoneyConsumeEvent>();
+            while (rs.next()) {
+                AtomicBoolean isExisted = new AtomicBoolean(false);
+                String receipt_id = rs.getString("id");
+                String buyerId = rs.getString("buyerid");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                int moneyAmount = Integer.parseInt(rs.getString("moneyamount"));
+                String consumerid = rs.getString("consumerid");
+                receipts.forEach(rc -> {
+                    if(rc.getId().equals(receipt_id)){
+                        rc.getConsumerList().add(consumerid);
+                    }
+                    isExisted.set(true);
+                });
+                if(!isExisted.get()){
+                    receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerid, description));
+                }
+            }
+            return receipts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void updateOne(Connection connection, ReceiptUpdateRequest receipt){
         try {
             PreparedStatement statement = connection.prepareStatement("UPDATE receipt SET moneyamount = ? ,buyerid = ?, name = ?, description = ? WHERE id = ?");

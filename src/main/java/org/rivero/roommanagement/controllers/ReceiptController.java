@@ -3,6 +3,7 @@ package org.rivero.roommanagement.controllers;
 import lombok.RequiredArgsConstructor;
 import org.rivero.roommanagement.dtos.ReceiptDTO;
 import org.rivero.roommanagement.entities.MoneyConsumeEvent;
+import org.rivero.roommanagement.entities.Report;
 import org.rivero.roommanagement.mapper.ReceiptDTOMapper;
 import org.rivero.roommanagement.request.ReceiptCreateRequest;
 import org.rivero.roommanagement.request.ReceiptUpdateRequest;
@@ -23,11 +24,17 @@ import java.util.stream.Collectors;
 public class ReceiptController {
 
     private final ReceiptService receiptService;
-    ReceiptDTOMapper receiptDTOMapper = new ReceiptDTOMapper();
+    private final ReceiptDTOMapper receiptDTOMapper;
 
     @GetMapping("/receipts")
     public List<ReceiptDTO> getReceipt() {
         return receiptService.getAllReceipt().stream().map(receiptDTOMapper).collect(Collectors.toList());
+    }
+
+    @GetMapping("/report/{userId}")
+    public ResponseEntity<Report> getReport(@PathVariable(name = "userId") String receiptId) {
+        receiptService.createReport(receiptId);
+        return ResponseEntity.ok().body(receiptService.createReport(receiptId));
     }
 
     @PutMapping("/receipts")
