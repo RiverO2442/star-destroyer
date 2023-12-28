@@ -9,6 +9,7 @@ import org.rivero.roommanagement.services.ReceiptService;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,8 +19,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MoneyConsumeEventRepository {
     public List<MoneyConsumeEvent> getList(Connection connection) {
         try {
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM receipt left join receipt_consumer rc on receipt.id = rc.receiptid");
+            ZoneId zoneId = ZoneId.of( "Asia/Ho_Chi_Minh" );
+            YearMonth yearMonthNow = YearMonth.now( zoneId );
+            LocalDate firstOfMonth = yearMonthNow.atDay( 1 );
+            LocalDate lastOfMonth = yearMonthNow.atEndOfMonth();
+            PreparedStatement preparedStatement = null;
+            preparedStatement = connection.prepareStatement("SELECT * FROM receipt left join receipt_consumer rc on receipt.id = rc.receiptid WHERE (createddate::date >= ?::date and createddate::date <= ?::date)");
+            preparedStatement.setString(1, firstOfMonth.toString());
+            preparedStatement.setString(2, lastOfMonth.toString());
+            ResultSet rs = preparedStatement.executeQuery();
             List<MoneyConsumeEvent> receipts = new ArrayList<MoneyConsumeEvent>();
             while (rs.next()) {
                 AtomicBoolean isExisted = new AtomicBoolean(false);
@@ -32,8 +40,40 @@ public class MoneyConsumeEventRepository {
                 receipts.forEach(rc -> {
                     if(rc.getId().equals(receipt_id)){
                         rc.getConsumerList().add(consumerid);
+                        isExisted.set(true);
                     }
-                    isExisted.set(true);
+                });
+                if(!isExisted.get()){
+                    receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerid, description));
+                }
+            }
+            return receipts;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<MoneyConsumeEvent> getList(Connection connection, String fromDate, String toDate) {
+        try {
+            PreparedStatement preparedStatement = null;
+            preparedStatement = connection.prepareStatement("SELECT * FROM receipt left join receipt_consumer rc on receipt.id = rc.receiptid WHERE (createddate::date >= ?::date and createddate::date <= ?::date)");
+            preparedStatement.setString(1, fromDate);
+            preparedStatement.setString(2, toDate);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<MoneyConsumeEvent> receipts = new ArrayList<MoneyConsumeEvent>();
+            while (rs.next()) {
+                AtomicBoolean isExisted = new AtomicBoolean(false);
+                String receipt_id = rs.getString("id");
+                String buyerId = rs.getString("buyerid");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                int moneyAmount = Integer.parseInt(rs.getString("moneyamount"));
+                String consumerid = rs.getString("consumerid");
+                receipts.forEach(rc -> {
+                    if(rc.getId().equals(receipt_id)){
+                        rc.getConsumerList().add(consumerid);
+                        isExisted.set(true);
+                    }
                 });
                 if(!isExisted.get()){
                     receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerid, description));
@@ -105,8 +145,11 @@ public class MoneyConsumeEventRepository {
                 String buyerId = rs.getString("buyerid");
                 String name = rs.getString("name");
                 String description = rs.getString("description");
+                Timestamp time = rs.getTimestamp("createddate");
+                System.out.println("Timestamp: " + time);
+                System.out.println("ZonedDateTime: " + time.toLocalDateTime().atZone(ZoneId.systemDefault()));
                 int moneyAmount = Integer.parseInt(rs.getString("moneyamount"));
-                return new ReceiptDTO(name, moneyAmount, buyerId, consumerIds, receipt_id, description);
+                return new ReceiptDTO(name, moneyAmount, buyerId, consumerIds, receipt_id, description, time.toLocalDateTime().atZone(ZoneId.systemDefault()));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -115,13 +158,15 @@ public class MoneyConsumeEventRepository {
     }
 
     public void insert(Connection connection, ReceiptCreateRequest receipt, String id) {
+
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO receipt VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO receipt VALUES (?, ?, ?, ?, ?, ?)");
             preparedStatement.setString(1, id);
             preparedStatement.setInt(2, receipt.moneyAmount());
             preparedStatement.setString(3, receipt.buyerId());
             preparedStatement.setString(4, receipt.name());
             preparedStatement.setString(5, receipt.description());
+            preparedStatement.setTimestamp(6,  new Timestamp(System.currentTimeMillis()));
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -142,8 +187,9 @@ public class MoneyConsumeEventRepository {
 
     public ArrayList<ReceiptConsumer> getListReceiptConsumerByUserId(Connection connection, String id) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE consumerid = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE consumerid = ? AND ($2 is null or createddate::date = date $2) ");
             preparedStatement.setString(1, id);
+            preparedStatement.setString(2, "2023-12-26");
             ArrayList<ReceiptConsumer> receiptConsumersList = new ArrayList<>();
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {

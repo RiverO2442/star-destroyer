@@ -1,5 +1,6 @@
 package org.rivero.roommanagement.controllers;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.rivero.roommanagement.dtos.ReceiptDTO;
 import org.rivero.roommanagement.entities.MoneyConsumeEvent;
@@ -27,8 +28,8 @@ public class ReceiptController {
     private final ReceiptDTOMapper receiptDTOMapper;
 
     @GetMapping("/receipts")
-    public List<ReceiptDTO> getReceipt() {
-        return receiptService.getAllReceipt().stream().map(receiptDTOMapper).collect(Collectors.toList());
+    public List<ReceiptDTO> getReceipt(@RequestParam(required = false) String fromDate, @RequestParam(required = false) String toDate) {
+        return receiptService.getAllReceipt(fromDate, toDate).stream().map(receiptDTOMapper).collect(Collectors.toList());
     }
 
     @GetMapping("/report/{userId}")
@@ -59,7 +60,8 @@ public class ReceiptController {
                     receipt.buyerId(),
                     receipt.consumerList(),
                     receipt.id(),
-                    receipt.description()
+                    receipt.description(),
+                    receipt.createDate()
             ));
         return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
     }

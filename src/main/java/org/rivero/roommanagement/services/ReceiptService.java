@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,9 @@ public class ReceiptService {
         return moneyConsumeEventRepository.getOne(connection, id, this);
     }
 
-    public List<MoneyConsumeEvent> getAllReceipt() {
+    public List<MoneyConsumeEvent> getAllReceipt(String fromDate,String  toDate) {
+        if(fromDate != null && toDate != null)
+            return moneyConsumeEventRepository.getList(connection, fromDate, toDate);
         return moneyConsumeEventRepository.getList(connection);
     }
 
