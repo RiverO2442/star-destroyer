@@ -37,6 +37,7 @@ public class MoneyConsumeEventRepository {
                 String description = rs.getString("description");
                 int moneyAmount = Integer.parseInt(rs.getString("moneyamount"));
                 String consumerid = rs.getString("consumerid");
+                Timestamp time = rs.getTimestamp("createddate");
                 receipts.forEach(rc -> {
                     if(rc.getId().equals(receipt_id)){
                         rc.getConsumerList().add(consumerid);
@@ -44,7 +45,7 @@ public class MoneyConsumeEventRepository {
                     }
                 });
                 if(!isExisted.get()){
-                    receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerid, description));
+                    receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerid, description, time.toLocalDateTime().atZone(ZoneId.systemDefault())));
                 }
             }
             return receipts;
@@ -69,6 +70,8 @@ public class MoneyConsumeEventRepository {
                 String description = rs.getString("description");
                 int moneyAmount = Integer.parseInt(rs.getString("moneyamount"));
                 String consumerid = rs.getString("consumerid");
+                Timestamp time = rs.getTimestamp("createddate");
+                ;
                 receipts.forEach(rc -> {
                     if(rc.getId().equals(receipt_id)){
                         rc.getConsumerList().add(consumerid);
@@ -76,7 +79,7 @@ public class MoneyConsumeEventRepository {
                     }
                 });
                 if(!isExisted.get()){
-                    receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerid, description));
+                    receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerid, description,  time.toLocalDateTime().atZone(ZoneId.systemDefault())));
                 }
             }
             return receipts;
@@ -99,6 +102,7 @@ public class MoneyConsumeEventRepository {
                 String description = rs.getString("description");
                 int moneyAmount = Integer.parseInt(rs.getString("moneyamount"));
                 String consumerid = rs.getString("consumerid");
+                Timestamp time = rs.getTimestamp("createddate");
                 receipts.forEach(rc -> {
                     if(rc.getId().equals(receipt_id)){
                         rc.getConsumerList().add(consumerid);
@@ -106,7 +110,7 @@ public class MoneyConsumeEventRepository {
                     isExisted.set(true);
                 });
                 if(!isExisted.get()){
-                    receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerid, description));
+                    receipts.add(new MoneyConsumeEvent(receipt_id, name, moneyAmount, buyerId, consumerid, description,  time.toLocalDateTime().atZone(ZoneId.systemDefault())));
                 }
             }
             return receipts;
@@ -146,8 +150,6 @@ public class MoneyConsumeEventRepository {
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 Timestamp time = rs.getTimestamp("createddate");
-                System.out.println("Timestamp: " + time);
-                System.out.println("ZonedDateTime: " + time.toLocalDateTime().atZone(ZoneId.systemDefault()));
                 int moneyAmount = Integer.parseInt(rs.getString("moneyamount"));
                 return new ReceiptDTO(name, moneyAmount, buyerId, consumerIds, receipt_id, description, time.toLocalDateTime().atZone(ZoneId.systemDefault()));
             }
@@ -158,7 +160,6 @@ public class MoneyConsumeEventRepository {
     }
 
     public void insert(Connection connection, ReceiptCreateRequest receipt, String id) {
-
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO receipt VALUES (?, ?, ?, ?, ?, ?)");
             preparedStatement.setString(1, id);
@@ -187,9 +188,9 @@ public class MoneyConsumeEventRepository {
 
     public ArrayList<ReceiptConsumer> getListReceiptConsumerByUserId(Connection connection, String id) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE consumerid = ? AND ($2 is null or createddate::date = date $2) ");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE consumerid = ?");
             preparedStatement.setString(1, id);
-            preparedStatement.setString(2, "2023-12-26");
+//            preparedStatement.setString(2, "2023-12-26");
             ArrayList<ReceiptConsumer> receiptConsumersList = new ArrayList<>();
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {

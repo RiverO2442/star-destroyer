@@ -29,13 +29,14 @@ public class MoneyConsumeEvent {
         this.description = description;
         this.createddate = createddate;
     }
-    public MoneyConsumeEvent(String id, String name,int moneyAmount, String buyerId, String consumerList, String description) {
+    public MoneyConsumeEvent(String id, String name,int moneyAmount, String buyerId, String consumerList, String description, ZonedDateTime createddate) {
         this.id = id;
         this.name = name;
         this.moneyAmount = moneyAmount;
         this.buyerId = buyerId;
         this.consumerList.add(consumerList);
         this.description = description;
+        this.createddate = createddate;
     }
     void accounting(List<User> userList){
         userList.forEach(user -> {

@@ -74,7 +74,7 @@ public class ReceiptService {
         return moneyConsumeEventRepository.getListReceiptConsumerByReceiptId(connection, id);
     }
 
-    public String dealeteOne(String id) {
+    public String deleteOneRC(String id) {
         moneyConsumeEventRepository.deleteOneReceiptConsumer(connection, id);
         return "Record deleted";
     }
