@@ -1,0 +1,3 @@
+http://127.0.0.1:8080/auth?error=redirect_uri_mismatch&error_description=The+redirect_uri+MUST+match+the+registered+callback+URL+for+this+application.&error_uri=https%3A%2F%2Fdocs.github.com%2Fapps%2Fmanaging-oauth-apps%2Ftroubleshooting-authorization-request-errors%2F%23redirect-uri-mismatch&state=nQKyJ7rxkWeVIn2u3g0kj0rwuaxC-5KL_QdLJQotD1s%3D
+
+https://github.com/login/oauth/authorize?response_type=code&client_id=74de25564b94ce99a0f3&scope=read:user&state=Iwv6eDMrcmi-Aln-mEAJSHjV98YTY1dwI-t8TgFNnnw%3D&redirect_uri=http://localhost:8080/login/oauth2/code/github

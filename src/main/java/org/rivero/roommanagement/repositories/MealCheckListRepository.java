@@ -4,6 +4,8 @@ import org.rivero.roommanagement.dtos.MealCheckListDTO;
 import org.rivero.roommanagement.entities.MealCheckList;
 
 import java.sql.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
@@ -32,10 +34,9 @@ public class MealCheckListRepository {
                 String id = rs.getString("id");
                 String month = rs.getString("month");
                 String consumerId = rs.getString("consumerid");
-//                add time stamp
-//                String id = rs.getString("id");
+                ZonedDateTime time = rs.getTimestamp("createddate").toLocalDateTime().atZone(ZoneId.systemDefault());
                 Array checkList = rs.getArray("checklist");
-                resultList.add(new MealCheckList(id, month, checkList, consumerId));
+                resultList.add(new MealCheckList(id, month, checkList, consumerId, time));
             }
             return resultList;
 
