@@ -12,7 +12,7 @@ build_jar(){
 }
 
 build_docker() {
-  docker build -t tiktuzki/start-destroyer:latest .
+  docker build -t tiktuzki/star-destroyer-api:latest .
 }
 
 if [ "$1" = "build-jar" ] ; then
