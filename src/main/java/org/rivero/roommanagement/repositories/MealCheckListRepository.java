@@ -2,19 +2,22 @@ package org.rivero.roommanagement.repositories;
 
 import org.rivero.roommanagement.dtos.MealCheckListDTO;
 import org.rivero.roommanagement.entities.MealCheckList;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
-
+@Repository
 public class MealCheckListRepository {
     public void insert(Connection connection, MealCheckListDTO list){
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO mealchecklist VALUES (?, ?, ?, ?, ?)");
             preparedStatement.setString(1, UUID.randomUUID().toString());
             preparedStatement.setString(2, list.month());
-            preparedStatement.setArray(3,list.checkList() );
+            preparedStatement.setString(3,list.checkList() );
             preparedStatement.setString(4, list.consumerId());
             preparedStatement.setTimestamp(5,  new Timestamp(System.currentTimeMillis()));
             preparedStatement.execute();
@@ -23,19 +26,18 @@ public class MealCheckListRepository {
         }
     }
 
-    public ArrayList<MealCheckList> getList(Connection connection){
+    public ArrayList<MealCheckListDTO> getList(Connection connection){
         try {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM mealchecklist");
-            ArrayList<MealCheckList> resultList = new ArrayList<MealCheckList>();
+            ArrayList<MealCheckListDTO> resultList = new ArrayList<MealCheckListDTO>();
             while(rs.next()){
                 String id = rs.getString("id");
                 String month = rs.getString("month");
                 String consumerId = rs.getString("consumerid");
-//                add time stamp
-//                String id = rs.getString("id");
-                Array checkList = rs.getArray("checklist");
-                resultList.add(new MealCheckList(id, month, checkList, consumerId));
+                ZonedDateTime time = rs.getTimestamp("createddate").toLocalDateTime().atZone(ZoneId.systemDefault());
+                String checkList = rs.getString("checklist");
+                resultList.add(new MealCheckListDTO(id, month, checkList, consumerId, time));
             }
             return resultList;
 
@@ -44,13 +46,33 @@ public class MealCheckListRepository {
             throw new RuntimeException(e);
         }
     }
-    public void updateOne(Connection connection, MealCheckList mealCheckList){
+
+    public MealCheckListDTO getOne(Connection connection, String id){
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM mealchecklist WHERE id = ?");
+            preparedStatement.setString(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                String mealid = rs.getString("id");
+                String month = rs.getString("month");
+                String consumerid = rs.getString("consumerid");
+                String checklist = rs.getString("checklist");
+                ZonedDateTime time = rs.getTimestamp("createddate").toLocalDateTime().atZone(ZoneId.systemDefault());
+                return new MealCheckListDTO(id, month, checklist, consumerid, time);
+            }
+            return null;
+        }
+        catch (SQLException e){
+            throw new RuntimeException();
+        }
+    }
+    public void updateOne(Connection connection, MealCheckListDTO mealCheckList){
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE mealchecklist SET month = ?, consumerid = ?, checkList = ? WHERE id = ?");
-            preparedStatement.setString(1, mealCheckList.getMonth());
-            preparedStatement.setString(2, mealCheckList.getConsumerId());
-            preparedStatement.setArray(3, mealCheckList.getCheckList());
-            preparedStatement.setString(4, mealCheckList.getId());
+            preparedStatement.setString(1, mealCheckList.month());
+            preparedStatement.setString(2, mealCheckList.consumerId());
+            preparedStatement.setString(3, mealCheckList.checkList());
+            preparedStatement.setString(4, mealCheckList.id());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

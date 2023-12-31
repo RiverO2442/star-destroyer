@@ -133,7 +133,7 @@ public class MoneyConsumeEventRepository {
         }
     }
 
-    public ReceiptDTO getOne(Connection connection, String id, ReceiptService receiptService) {
+    public ReceiptDTO getOne(Connection connection, String id) {
         try {
             PreparedStatement preparedStatement = null;
             preparedStatement = connection.prepareStatement("SELECT * FROM receipt WHERE id = ?");
@@ -141,17 +141,14 @@ public class MoneyConsumeEventRepository {
             ResultSet rs;
             rs = preparedStatement.executeQuery();
             ArrayList<String> consumerIds = new ArrayList<>();
-            receiptService.getByReceiptId(id).forEach(data -> {
-                consumerIds.add(data.getConsumerId());
-            });
             while (rs.next()) {
                 String receipt_id = rs.getString("id");
                 String buyerId = rs.getString("buyerid");
                 String name = rs.getString("name");
                 String description = rs.getString("description");
-                Timestamp time = rs.getTimestamp("createddate");
+                ZonedDateTime time = rs.getTimestamp("createddate").toLocalDateTime().atZone(ZoneId.systemDefault());
                 int moneyAmount = Integer.parseInt(rs.getString("moneyamount"));
-                return new ReceiptDTO(name, moneyAmount, buyerId, consumerIds, receipt_id, description, time.toLocalDateTime().atZone(ZoneId.systemDefault()));
+                return new ReceiptDTO(name, moneyAmount, buyerId, consumerIds, receipt_id, description, time);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

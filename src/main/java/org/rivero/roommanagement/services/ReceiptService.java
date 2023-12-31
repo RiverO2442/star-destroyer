@@ -33,7 +33,7 @@ public class ReceiptService {
 
 
     public ReceiptDTO getReceiptById(String id) {
-        return moneyConsumeEventRepository.getOne(connection, id, this);
+        return moneyConsumeEventRepository.getOne(connection, id);
     }
 
     public List<MoneyConsumeEvent> getAllReceipt(String fromDate,String  toDate) {
@@ -83,7 +83,10 @@ public class ReceiptService {
         List<ReceiptConsumer> receiptConsumers = moneyConsumeEventRepository.getListReceiptConsumerByUserId(connection, userId);
         List<ReceiptDTO> consumedList = new ArrayList<>();
         receiptConsumers.forEach(item -> {
-            ReceiptDTO result = moneyConsumeEventRepository.getOne(connection, item.getReceiptId(), this);
+            ReceiptDTO result = moneyConsumeEventRepository.getOne(connection, item.getReceiptId());
+            this.getByReceiptId(result.id()).forEach(data -> {
+                result.consumerList().add(data.getConsumerId());
+            });
             consumedList.add(result);
         });
         List<MoneyConsumeEvent> paidList = moneyConsumeEventRepository.getListByUserId(connection, userId);

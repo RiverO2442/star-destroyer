@@ -32,12 +32,6 @@ public class ReceiptController {
         return receiptService.getAllReceipt(fromDate, toDate).stream().map(receiptDTOMapper).collect(Collectors.toList());
     }
 
-    @GetMapping("/report/{userId}")
-    public ResponseEntity<Report> getReport(@PathVariable(name = "userId") String receiptId) {
-        receiptService.createReport(receiptId);
-        return ResponseEntity.ok().body(receiptService.createReport(receiptId));
-    }
-
     @PutMapping("/receipts")
     public ResponseEntity<String> updateReceipt(@RequestBody ReceiptUpdateRequest request){
         receiptService.updateOne(request);

@@ -5,8 +5,10 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public record MealCheckListDTO(
+        String id,
         String month,
-        Array checkList,
-        String consumerId
+        String checkList,
+        String consumerId,
+        ZonedDateTime time
 ) {
 }
