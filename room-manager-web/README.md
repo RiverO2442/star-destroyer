@@ -150,8 +150,8 @@ material-dashboard-react
     │   ├── Tasks
     │   │   └── Tasks.js
     │   └── Typography
-    │       ├── Danger.js
-    │       ├── Info.js
+    │       ├── Danger.tsx
+    │       ├── Info.tsx
     │       ├── Muted.js
     │       ├── Primary.js
     │       ├── Quote.js
