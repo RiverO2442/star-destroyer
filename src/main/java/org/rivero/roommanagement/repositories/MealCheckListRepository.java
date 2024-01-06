@@ -1,5 +1,6 @@
 package org.rivero.roommanagement.repositories;
 
+import lombok.extern.slf4j.Slf4j;
 import org.rivero.roommanagement.dtos.MealCheckListDTO;
 import org.rivero.roommanagement.entities.MealCheckList;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 @Repository
+@Slf4j
 public class MealCheckListRepository {
     public void insert(Connection connection, MealCheckListDTO list){
         try {
@@ -35,7 +37,7 @@ public class MealCheckListRepository {
                 String id = rs.getString("id");
                 String month = rs.getString("month");
                 String consumerId = rs.getString("consumerid");
-                ZonedDateTime time = rs.getTimestamp("createddate").toLocalDateTime().atZone(ZoneId.systemDefault());
+                ZonedDateTime time = rs.getTimestamp("created_date").toLocalDateTime().atZone(ZoneId.systemDefault());
                 String checkList = rs.getString("checklist");
                 resultList.add(new MealCheckListDTO(id, month, checkList, consumerId, time));
             }
@@ -57,7 +59,7 @@ public class MealCheckListRepository {
                 String month = rs.getString("month");
                 String consumerid = rs.getString("consumerid");
                 String checklist = rs.getString("checklist");
-                ZonedDateTime time = rs.getTimestamp("createddate").toLocalDateTime().atZone(ZoneId.systemDefault());
+                ZonedDateTime time = rs.getTimestamp("created_date").toLocalDateTime().atZone(ZoneId.systemDefault());
                 return new MealCheckListDTO(id, month, checklist, consumerid, time);
             }
             return null;
@@ -67,13 +69,25 @@ public class MealCheckListRepository {
         }
     }
     public void updateOne(Connection connection, MealCheckListDTO mealCheckList){
+        log.debug("{}", mealCheckList);
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE mealchecklist SET month = ?, consumerid = ?, checkList = ? WHERE id = ?");
             preparedStatement.setString(1, mealCheckList.month());
             preparedStatement.setString(2, mealCheckList.consumerId());
             preparedStatement.setString(3, mealCheckList.checkList());
             preparedStatement.setString(4, mealCheckList.id());
+            preparedStatement.execute();
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteOne(Connection connection, String id){
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM mealchecklist WHERE id = ?");
+            preparedStatement.setString(1, id);
+            preparedStatement.execute();
+        } catch (SQLException e){
             throw new RuntimeException(e);
         }
     }

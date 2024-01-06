@@ -1,11 +1,8 @@
 package org.rivero.roommanagement.request;
 
-import lombok.Getter;
-
 import java.time.ZonedDateTime;
-import java.util.List;
 
-public record MealCreateRequest(
+public record MealUpdateRequest(
         String month,
         String consumerId,
         String checkList,
