@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.rivero.roommanagement.entities.User;
 import org.rivero.roommanagement.repositories.DBConnectionManager;
 import org.rivero.roommanagement.repositories.UserRepository;
+import org.rivero.roommanagement.request.UserUpdateRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -34,10 +35,17 @@ public class UserService {
         return userRepository.getList(connection);
     }
 
-    public String register(User user) {
+    public void register(User user) {
         if (userRepository.getPasswordHash(connection, user.getName()).isEmpty()) {
             userRepository.insert(connection, user);
-            return "New User Registered";
-        } else return "Existed User";
+        }
+    }
+
+    public void deleteOne(String id){
+        userRepository.deleteOne(connection, id);
+    }
+
+    public void updateOne(UserUpdateRequest userUpdateRequest, String id){
+        userRepository.updateOne(connection, userUpdateRequest, id);
     }
 }

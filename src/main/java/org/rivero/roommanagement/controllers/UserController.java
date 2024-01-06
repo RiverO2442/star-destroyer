@@ -3,6 +3,7 @@ package org.rivero.roommanagement.controllers;
 import lombok.RequiredArgsConstructor;
 import org.rivero.roommanagement.entities.User;
 import org.rivero.roommanagement.repositories.UserRepository;
+import org.rivero.roommanagement.request.UserUpdateRequest;
 import org.rivero.roommanagement.services.UserService;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -26,32 +27,30 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         userService.register(user);
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user) {
-        return ResponseEntity.ok().body(userService.login(user));
-
+        return ResponseEntity.ok(userService.login(user));
     }
 
     @GetMapping("/users/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable(name = "userId") String userId) {
         if (userService.getUserById(userId) != null)
-            return ResponseEntity.ok().body(userService.getUserById(userId));
-        return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
+            return ResponseEntity.ok(userService.getUserById(userId));
+        return ResponseEntity.notFound().build();
     }
 
-//    @PutMapping("/user/{userId}")
-//    public ResponseEntity<Void> updateUserById(@PathVariable(name = "userId") Integer userId, @RequestBody User user) {
-//        userList.remove(userId.intValue());
-//        userList.add(userId, user);
-//        return ResponseEntity.noContent().build();
-//    }
-//
-//    @DeleteMapping("/user/{userId}")
-//    public ResponseEntity<Void> deleteUserById(@PathVariable(name = "userId") Integer userId) {
-//        userList.remove(userId.intValue());
-//        return ResponseEntity.noContent().build();
-//    }
+    @PutMapping("/user/{userId}")
+    public ResponseEntity<String> updateUserById(@PathVariable(name = "userId") String userId, @RequestBody UserUpdateRequest user) {
+        userService.updateOne(user, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable(name = "userId") String userId) {
+        userService.deleteOne(userId);
+        return ResponseEntity.noContent().build();
+    }
 }

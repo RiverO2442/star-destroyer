@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.function.Function;
 @Service
 public class ReceiptDTOMapper implements Function<MoneyConsumeEvent, ReceiptDTO> {
-    @Override
     public ReceiptDTO apply(MoneyConsumeEvent receipt){
         return new ReceiptDTO(
                 receipt.getName(),
@@ -18,7 +17,8 @@ public class ReceiptDTOMapper implements Function<MoneyConsumeEvent, ReceiptDTO>
                 receipt.getBuyerId(),
                 receipt.getConsumerList(),
                 receipt.getId(),
-                receipt.getDescription()
+                receipt.getDescription(),
+                receipt.getCreateddate()
         );
     }
 }

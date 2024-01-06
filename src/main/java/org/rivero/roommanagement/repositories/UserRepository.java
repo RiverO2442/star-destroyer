@@ -2,6 +2,7 @@ package org.rivero.roommanagement.repositories;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.rivero.roommanagement.entities.User;
+import org.rivero.roommanagement.request.UserUpdateRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.DigestUtils;
 
@@ -27,6 +28,26 @@ public class UserRepository {
                 users.add(new User(id, username, password, 0, balance, debt));
             }
             return users;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteOne(Connection connection, String id){
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM user_tbl WHERE id = ?");
+            preparedStatement.setString(1, id);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public  void updateOne(Connection connection, UserUpdateRequest userUpdateRequest, String id){
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user_tbl SET passwordhash = ? WHERE  id = ?");
+            preparedStatement.setString(1, DigestUtils.md5DigestAsHex(userUpdateRequest.passwordHash().getBytes(StandardCharsets.UTF_8)));
+            preparedStatement.setString(2, id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,6 @@
 package org.rivero.roommanagement.dtos;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public record ReceiptDTO(
@@ -8,6 +9,7 @@ public record ReceiptDTO(
         String buyerId,
         List<String>consumerList,
         String id,
-        String description
+        String description,
+        ZonedDateTime createDate
 ) {
 }
