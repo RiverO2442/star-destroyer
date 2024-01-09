@@ -146,17 +146,17 @@ material-dashboard-react
     │   │   ├── Snackbar.js
     │   │   └── SnackbarContent.js
     │   ├── Table
-    │   │   └── Table.js
+    │   │   └── Table.tsx
     │   ├── Tasks
-    │   │   └── Tasks.js
+    │   │   └── Tasks.tsx
     │   └── Typography
     │       ├── Danger.tsx
     │       ├── Info.tsx
-    │       ├── Muted.js
-    │       ├── Primary.js
-    │       ├── Quote.js
-    │       ├── Success.js
-    │       └── Warning.js
+    │       ├── Muted.tsx
+    │       ├── Primary.tsx
+    │       ├── Quote.tsx
+    │       ├── Success.tsx
+    │       └── Warning.tsx
     ├── layouts
     │   ├── Admin.js
     │   └── RTL.js
