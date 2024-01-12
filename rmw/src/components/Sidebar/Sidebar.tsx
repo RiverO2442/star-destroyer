@@ -1,10 +1,8 @@
 /*eslint-disable*/
-import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { NavLink, useLocation } from "react-router-dom";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
@@ -12,14 +10,26 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Icon from "@material-ui/core/Icon";
 // core components
-import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
-import RTLNavbarLinks from "components/Navbars/RTLNavbarLinks.js";
+import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.tsx";
+import RTLNavbarLinks from "components/Navbars/RTLNavbarLinks.tsx";
 
-import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
-
+import React, {ReactNode} from "react";
+import styles from "../../assets/jss/material-dashboard-react/components/typographyStyle.js";
+import {ClassNameMap, makeStyles} from "@mui/styles";
 const useStyles = makeStyles(styles);
 
-export default function Sidebar(props) {
+interface componentProps {
+    rtlActive: boolean,
+    handleDrawerToggle: Function,
+    bgColor: "purple"| "blue"| "green"| "orange"| "red",
+    logo: String,
+    image: String,
+    logoText: String,
+    routes: object[],
+    open: boolean,
+}
+
+export default function Sidebar(props: componentProps) {
   const classes = useStyles();
   let location = useLocation();
   // verifies if routeName is the one active (in browser input)
@@ -151,14 +161,3 @@ export default function Sidebar(props) {
     </div>
   );
 }
-
-Sidebar.propTypes = {
-  rtlActive: PropTypes.bool,
-  handleDrawerToggle: PropTypes.func,
-  bgColor: PropTypes.oneOf(["purple", "blue", "green", "orange", "red"]),
-  logo: PropTypes.string,
-  image: PropTypes.string,
-  logoText: PropTypes.string,
-  routes: PropTypes.arrayOf(PropTypes.object),
-  open: PropTypes.bool,
-};

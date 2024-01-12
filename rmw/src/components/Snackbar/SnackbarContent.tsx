@@ -1,21 +1,26 @@
-import React from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
 import Snack from "@material-ui/core/SnackbarContent";
 import IconButton from "@material-ui/core/IconButton";
 // @material-ui/icons
 import Close from "@material-ui/icons/Close";
 // core components
-import styles from "assets/jss/material-dashboard-react/components/snackbarContentStyle.js";
-
+import React, {ReactNode} from "react";
+import styles from "../../assets/jss/material-dashboard-react/components/typographyStyle.js";
+import {ClassNameMap, makeStyles} from "@mui/styles";
 const useStyles = makeStyles(styles);
 
-export default function SnackbarContent(props) {
+interface componentProps {
+  message: ReactNode,
+  color: "info"| "success"| "warning"| "danger"| "primary",
+  close: boolean,
+  icon: object,
+  rtlActive: boolean
+}
+export default function SnackbarContent(props: componentProps) {
   const classes = useStyles();
   const { message, color, close, icon, rtlActive } = props;
-  var action = [];
+  var action: ReactNode = [];
   const messageClasses = classNames({
     [classes.iconMessage]: icon !== undefined,
   });
@@ -48,11 +53,3 @@ export default function SnackbarContent(props) {
     />
   );
 }
-
-SnackbarContent.propTypes = {
-  message: PropTypes.node.isRequired,
-  color: PropTypes.oneOf(["info", "success", "warning", "danger", "primary"]),
-  close: PropTypes.bool,
-  icon: PropTypes.object,
-  rtlActive: PropTypes.bool,
-};

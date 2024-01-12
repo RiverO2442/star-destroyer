@@ -118,33 +118,33 @@ material-dashboard-react
     ├── components
     │   ├── Card
     │   │   ├── Card.js
-    │   │   ├── CardAvatar.js
-    │   │   ├── CardBody.js
-    │   │   ├── CardFooter.js
-    │   │   ├── CardHeader.js
-    │   │   └── CardIcon.js
+    │   │   ├── CardAvatar.tsx
+    │   │   ├── CardBody.tsx
+    │   │   ├── CardFooter.tsx
+    │   │   ├── CardHeader.tsx
+    │   │   └── CardIcon.tsx
     │   ├── CustomButtons
-    │   │   └── Button.js
-    │   ├── CustomInput
-    │   │   └── CustomInput.js
+    │   │   └── Button.tsx
+    │   ├── CustomInputtsx
+    │   │   └── CustomInputtsx
     │   ├── CustomTabs
-    │   │   └── CustomTabs.js
+    │   │   └── CustomTabs.tsx
     │   ├── FixedPlugin
-    │   │   └── FixedPlugin.js
+    │   │   └── FixedPlugin.tsx
     │   ├── Footer
-    │   │   └── Footer.js
+    │   │   └── Footer.tsx
     │   ├── Grid
-    │   │   ├── GridContainer.js
-    │   │   └── GridItem.js
+    │   │   ├── GridContainer.tsx
+    │   │   └── GridItem.tsx
     │   ├── Navbars
-    │   │   ├── AdminNavbarLinks.js
-    │   │   ├── Navbar.js
-    │   │   └── RTLNavbarLinks.js
+    │   │   ├── AdminNavbarLinks.tsx
+    │   │   ├── Navbar.tsx
+    │   │   └── RTLNavbarLinks.tsx
     │   ├── Sidebar
-    │   │   └── Sidebar.js
+    │   │   └── Sidebar.tsx
     │   ├── Snackbar
-    │   │   ├── Snackbar.js
-    │   │   └── SnackbarContent.js
+    │   │   ├── Snackbar.tsx
+    │   │   └── SnackbarContent.tsx
     │   ├── Table
     │   │   └── Table.tsx
     │   ├── Tasks
