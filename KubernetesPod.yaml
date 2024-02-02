@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: jenkins-ci
+spec:
+  containers:
+    - name: gradle
+      image: gradle:8.2-jdk17-focal
+      command:
+        - cat
+      tty: true
+      env:
+        - name: GRADLE_RO_DEP_CACHE
+          value: /home/gradle/.gradle-read-only/caches
+      volumeMounts:
+        - mountPath: /home/gradle/.gradle-read-only/caches/modules-2
+          name: gradle-cache
+          readOnly: true
+    - name: python
+      image: python:3.9-alpine
+      command:
+        - cat
+      tty: true
+    - name: docker
+      image: docker:latest
+      command:
+        - cat
+      tty: true
+      volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+    - name: kaniko
+      image: gcr.io/kaniko-project/executor:latest
+      args: ["--context=git://github.com/agavitalis/kaniko-kubernetes.git",
+             "--destination=tiktuzki/kaniko-build-demo:1.0.0",
+             "--dockerfile=Dockerfile"]
+      volumeMounts:
+        - name: kaniko-secret
+          mountPath: /kaniko/.docker
+  volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+    - name: gradle-cache
+      hostPath:
+        path: /home/tik/.gradle/caches/modules-2
+    - name: kaniko-secret
+      secret:
+        secretName: reg-credentials
+        items:
+          - key: .dockerconfigjson
+            path: config.json
