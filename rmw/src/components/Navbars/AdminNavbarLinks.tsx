@@ -14,8 +14,8 @@ import Notifications from "@material-ui/icons/Notifications";
 import Dashboard from "@material-ui/icons/Dashboard";
 import Search from "@material-ui/icons/Search";
 // core components
-import CustomInput from "components/CustomInput.tsx/CustomInput.tsx.js";
-import Button from "components/CustomButtons/Button.tsx";
+import CustomInput from "../CustomInput/CustomInput";
+import Button from "../CustomButtons/Button";
 
 import React, {ReactNode} from "react";
 import styles from "../../assets/jss/material-dashboard-react/components/typographyStyle.js";

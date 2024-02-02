@@ -8,7 +8,7 @@ import styles from "../../assets/jss/material-dashboard-react/components/typogra
 import {ClassNameMap, makeStyles} from "@mui/styles";
 
 interface componentProps {
-  color: "primary"|
+  color?: "primary"|
   "info"|
   "success"|
   "warning"|
@@ -16,17 +16,17 @@ interface componentProps {
   "rose"|
   "white"|
   "transparent",
-  size: "sm"| "lg",
-  simple: boolean,
-  round: boolean,
-  disabled: boolean,
-  block: boolean,
-  link: boolean,
-  justIcon: boolean,
-  className: String,
+  size?: "sm"| "lg",
+  simple?: boolean,
+  round?: boolean,
+  disabled?: boolean,
+  block?: boolean,
+  link?: boolean,
+  justIcon?: boolean,
+  className?: String,
   // use this to pass the classes props from Material-UI
-  muiClasses: object,
-  children: ReactNode,
+  muiClasses?: object,
+  children?: ReactNode,
 }
 
 const useStyles = makeStyles(styles);
@@ -66,26 +66,3 @@ export default function RegularButton(props: componentProps) {
   );
 }
 
-RegularButton.propTypes = {
-  color: PropTypes.oneOf([
-    "primary",
-    "info",
-    "success",
-    "warning",
-    "danger",
-    "rose",
-    "white",
-    "transparent",
-  ]),
-  size: PropTypes.oneOf(["sm", "lg"]),
-  simple: PropTypes.bool,
-  round: PropTypes.bool,
-  disabled: PropTypes.bool,
-  block: PropTypes.bool,
-  link: PropTypes.bool,
-  justIcon: PropTypes.bool,
-  className: PropTypes.string,
-  // use this to pass the classes props from Material-UI
-  muiClasses: PropTypes.object,
-  children: PropTypes.node,
-};

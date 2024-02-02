@@ -8,12 +8,12 @@ import Hidden from "@material-ui/core/Hidden";
 // @material-ui/icons
 import Menu from "@material-ui/icons/Menu";
 // core components
-import AdminNavbarLinks from "./AdminNavbarLinks.js";
-import RTLNavbarLinks from "./RTLNavbarLinks.tsx";
-import Button from "components/CustomButtons/Button.tsx";
+// import AdminNavbarLinks from "./AdminNavbarLinks.js";
+// import RTLNavbarLinks from "./RTLNavbarLinks.tsx";
+import Button from "../CustomButtons/Button";
 
 //hooks
-import { useRouteName } from "hooks";
+// import { useRouteName } from "hooks";
 
 import React, {ReactNode} from "react";
 import styles from "../../assets/jss/material-dashboard-react/components/typographyStyle.js";
@@ -28,10 +28,10 @@ interface componentProps{
 }
 
 export default function Header(props: componentProps) {
-  const classes = useStyles();
-  const routeName = useRouteName();
+  const classes: any = useStyles();
+  // const routeName = useRouteName();
   const { color } = props;
-  const appBarClasses = classNames({
+  const appBarClasses: string = classNames({
     [" " + classes[color]]: color,
   });
   return (
@@ -39,22 +39,22 @@ export default function Header(props: componentProps) {
       <Toolbar className={classes.container}>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button color="transparent" href="#" className={classes.title}>
-            {routeName}
+          <Button color="transparent" className={classes.title}>
+            {/*{routeName}*/}
           </Button>
         </div>
-        <Hidden smDown implementation="css">
-          {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
-        </Hidden>
-        <Hidden mdUp implementation="css">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={props.handleDrawerToggle}
-          >
-            <Menu />
-          </IconButton>
-        </Hidden>
+        {/*<Hidden smDown implementation="css">*/}
+        {/*  {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}*/}
+        {/*</Hidden>*/}
+        {/*<Hidden mdUp implementation="css">*/}
+        {/*  <IconButton*/}
+        {/*    color="inherit"*/}
+        {/*    aria-label="open drawer"*/}
+        {/*    onClick={props.handleDrawerToggle}*/}
+        {/*  >*/}
+        {/*    <Menu />*/}
+        {/*  </IconButton>*/}
+        {/*</Hidden>*/}
       </Toolbar>
     </AppBar>
   );

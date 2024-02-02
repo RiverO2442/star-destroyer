@@ -32,12 +32,4 @@ const Card: FC<CardProps> = (props) => {
     );
 }
 
-Card.propTypes = {
-    className: PropTypes.string,
-    plain: PropTypes.bool,
-    profile: PropTypes.bool,
-    chart: PropTypes.bool,
-    children: PropTypes.node,
-};
-
 export default Card;
