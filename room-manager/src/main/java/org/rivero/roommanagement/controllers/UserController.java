@@ -2,23 +2,20 @@ package org.rivero.roommanagement.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.rivero.roommanagement.entities.User;
-import org.rivero.roommanagement.repositories.UserRepository;
+import org.rivero.roommanagement.request.LoginRequest;
 import org.rivero.roommanagement.request.UserUpdateRequest;
 import org.rivero.roommanagement.services.UserService;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
     @GetMapping("/users")
     public List<User> getUser() {
         return userService.getAllUser();
@@ -31,8 +28,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
-        return ResponseEntity.ok(userService.login(user));
+    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(userService.login(request));
     }
 
     @GetMapping("/users/{userId}")

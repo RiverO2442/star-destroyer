@@ -1,9 +1,8 @@
 package org.rivero.roommanagement.entities;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.rivero.roommanagement.dtos.ReceiptDTO;
+import org.rivero.roommanagement.dtos.ReceiptDto;
 
 import java.util.List;
 
@@ -11,12 +10,13 @@ import java.util.List;
 @Setter
 public class Report {
     String id;
-    List<ReceiptDTO> receiptList;
-    List<ReceiptDTO> paidReceiptList;
+    List<ReceiptDto> receiptList;
+    List<ReceiptDto> paidReceiptList;
     String consumerId;
     int paidTotal;
     int consumedTotal;
-    public Report(String id, List<ReceiptDTO> receiptList, List<ReceiptDTO> paidReceiptList, String consumerId, int paidTotal, int consumedTotal){
+
+    public Report(String id, List<ReceiptDto> receiptList, List<ReceiptDto> paidReceiptList, String consumerId, int paidTotal, int consumedTotal) {
         this.id = id;
         this.receiptList = receiptList;
         this.paidReceiptList = paidReceiptList;

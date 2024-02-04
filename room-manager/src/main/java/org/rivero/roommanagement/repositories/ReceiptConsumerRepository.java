@@ -3,9 +3,13 @@ package org.rivero.roommanagement.repositories;
 import org.rivero.roommanagement.entities.ReceiptConsumer;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
+
 @Repository
 public class ReceiptConsumerRepository {
     public ArrayList<ReceiptConsumer> getListByUserId(Connection connection, String id) {

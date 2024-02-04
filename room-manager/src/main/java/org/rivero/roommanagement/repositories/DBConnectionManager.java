@@ -9,7 +9,8 @@ public class DBConnectionManager {
     String dbName = "room_manager";
     String username = "postgres";
     String password = "P@ssword789";
-    public Connection connect(){
+
+    public Connection connect() {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(

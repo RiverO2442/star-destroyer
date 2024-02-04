@@ -1,6 +1,7 @@
 package org.rivero.roommanagement.repositories;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import lombok.SneakyThrows;
+import org.rivero.roommanagement.dtos.UserInfo;
 import org.rivero.roommanagement.entities.User;
 import org.rivero.roommanagement.request.UserUpdateRequest;
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+
 @Repository
 public class UserRepository {
     public List<User> getList(Connection connection) {
@@ -33,7 +36,7 @@ public class UserRepository {
         }
     }
 
-    public void deleteOne(Connection connection, String id){
+    public void deleteOne(Connection connection, String id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM user_tbl WHERE id = ?");
             preparedStatement.setString(1, id);
@@ -43,7 +46,7 @@ public class UserRepository {
         }
     }
 
-    public  void updateOne(Connection connection, UserUpdateRequest userUpdateRequest, String id){
+    public void updateOne(Connection connection, UserUpdateRequest userUpdateRequest, String id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user_tbl SET passwordhash = ? WHERE  id = ?");
             preparedStatement.setString(1, DigestUtils.md5DigestAsHex(userUpdateRequest.passwordHash().getBytes(StandardCharsets.UTF_8)));
@@ -53,7 +56,7 @@ public class UserRepository {
         }
     }
 
-    public void increaseUserDebt(Connection connection, int amount, String id){
+    public void increaseUserDebt(Connection connection, int amount, String id, UserInfo userInfo) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user_tbl SET debt = debt + ? WHERE id = ?");
             preparedStatement.setInt(1, amount);
@@ -65,7 +68,7 @@ public class UserRepository {
 
     }
 
-    public void increaseUserBalance(Connection connection, int amount, String id){
+    public void increaseUserBalance(Connection connection, int amount, String id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user_tbl SET balance = balance + ? WHERE id = ?");
             preparedStatement.setInt(1, amount);
@@ -94,6 +97,23 @@ public class UserRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @SneakyThrows
+    public Optional<User> getByUsername(Connection connection, String username) {
+        PreparedStatement preparedStatement = null;
+        preparedStatement = connection.prepareStatement("SELECT * FROM user_tbl WHERE username = ?");
+        preparedStatement.setString(1, username);
+        ResultSet rs;
+        rs = preparedStatement.executeQuery();
+        if (rs.next()) {
+            String userId = rs.getString("id");
+            String password = rs.getString("passwordHash");
+            int balance = rs.getInt("balance");
+            int debt = rs.getInt("debt");
+            return Optional.of(new User(userId, username, password, 0, balance, debt));
+        }
+        return Optional.empty();
     }
 
     public void insert(Connection connection, User user) {

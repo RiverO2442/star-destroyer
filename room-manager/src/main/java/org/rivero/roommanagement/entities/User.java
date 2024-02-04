@@ -4,20 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-import java.util.UUID;
-
 @Getter
 @Setter
 @ToString
-public class User{
+public class User {
     String name;
     String id;
     String passwordHash;
     int balance;
     int debt;
     int role;
-    public User(String id, String name, String passwordHash, int role, int balance, int debt){
+
+    public User(String id, String name, String passwordHash, int role, int balance, int debt) {
         this.name = name;
         this.passwordHash = passwordHash;
         this.role = role;
@@ -25,16 +23,20 @@ public class User{
         this.debt = debt;
         this.id = id;
     }
-    User getUserDetail(){
+
+    User getUserDetail() {
         return this;
     }
-    void setUserName(String name){
+
+    void setUserName(String name) {
         this.name = name;
     }
-    void setUserPassword(String passwordHash, String newPasswordHash){
-        if(this.passwordHash == passwordHash) this.passwordHash = newPasswordHash;
+
+    void setUserPassword(String passwordHash, String newPasswordHash) {
+        if (this.passwordHash == passwordHash) this.passwordHash = newPasswordHash;
     }
-    void increaseUserBalance(int amount){
+
+    void increaseUserBalance(int amount) {
         this.balance = this.balance + amount;
     }
 //    MoneyConsumeEvent createMoneyConsumeEvent(List<String> consumerList){

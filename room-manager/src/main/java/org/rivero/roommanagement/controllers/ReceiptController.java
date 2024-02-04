@@ -1,21 +1,19 @@
 package org.rivero.roommanagement.controllers;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
-import org.rivero.roommanagement.dtos.ReceiptDTO;
-import org.rivero.roommanagement.entities.MoneyConsumeEvent;
-import org.rivero.roommanagement.entities.Report;
+import org.rivero.roommanagement.dtos.ReceiptDto;
+import org.rivero.roommanagement.dtos.UserInfo;
 import org.rivero.roommanagement.mapper.ReceiptDTOMapper;
 import org.rivero.roommanagement.request.ReceiptCreateRequest;
 import org.rivero.roommanagement.request.ReceiptUpdateRequest;
 import org.rivero.roommanagement.services.ReceiptService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.rivero.roommanagement.services.UserService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,29 +24,40 @@ public class ReceiptController {
 
     private final ReceiptService receiptService;
     private final ReceiptDTOMapper receiptDTOMapper;
+    private final UserService userService;
 
     @GetMapping("/receipts")
-    public List<ReceiptDTO> getReceipt(@RequestParam(required = false) String fromDate, @RequestParam(required = false) String toDate) {
-        return receiptService.getAllReceipt(fromDate, toDate).stream().map(receiptDTOMapper).collect(Collectors.toList());
+    public List<ReceiptDto> getReceipt(
+            @RequestParam(required = false) ZonedDateTime fromDate,
+            @RequestParam(required = false) ZonedDateTime toDate,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+    ) {
+        UserInfo userInfo = userService.authorize(token);
+        return receiptService.getAllReceipt(fromDate, toDate, userInfo).stream().map(receiptDTOMapper).collect(Collectors.toList());
     }
 
     @PutMapping("/receipts")
-    public ResponseEntity<String> updateReceipt(@RequestBody ReceiptUpdateRequest request){
+    public ResponseEntity<String> updateReceipt(@RequestBody ReceiptUpdateRequest request) {
         receiptService.updateOne(request);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/receipts")
-    public ResponseEntity<String> addReceipt(@RequestBody ReceiptCreateRequest request) {
-        receiptService.create(request);
+    public ResponseEntity<String> addReceipt(
+            @RequestBody ReceiptCreateRequest request,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+    ) {
+        UserInfo userInfo = userService.authorize(token);
+
+        receiptService.create(request, userInfo);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).build();
     }
 
     @GetMapping("/receipts/{receiptId}")
-    public ResponseEntity<ReceiptDTO> getReceiptById(@PathVariable(name = "receiptId") String receiptId) {
-        ReceiptDTO receipt = receiptService.getReceiptById(receiptId);
+    public ResponseEntity<ReceiptDto> getReceiptById(@PathVariable(name = "receiptId") String receiptId) {
+        ReceiptDto receipt = receiptService.getReceiptById(receiptId);
         if (receiptService.getReceiptById(receiptId) != null)
-            return ResponseEntity.ok().body(new ReceiptDTO(
+            return ResponseEntity.ok().body(new ReceiptDto(
                     receipt.name(),
                     receipt.moneyAmount(),
                     receipt.buyerId(),

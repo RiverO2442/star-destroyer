@@ -1,9 +1,5 @@
 package org.rivero.roommanagement.entities;
 
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-
 public class Transaction {
     int moneyAmount;
     String receiverId;

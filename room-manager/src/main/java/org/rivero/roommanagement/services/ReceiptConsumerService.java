@@ -7,9 +7,8 @@ import org.rivero.roommanagement.repositories.ReceiptConsumerRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+
 @RequiredArgsConstructor
 @Service
 public class ReceiptConsumerService {
@@ -18,7 +17,7 @@ public class ReceiptConsumerService {
     Connection connection = dbConnectionManager.connect();
 
     public void create(ReceiptConsumer request) {
-         receiptConsumerRepository.insert(connection, request);
+        receiptConsumerRepository.insert(connection, request);
     }
 
     public ArrayList<ReceiptConsumer> getByUserId(String id) {

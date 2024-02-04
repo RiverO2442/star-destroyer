@@ -1,4 +1,10 @@
+server:
+  error:
+    include-message: always
 spring:
+  mvc:
+    format:
+      date-time: iso
   threads:
     virtual:
       enabled: true
@@ -18,3 +24,5 @@ logging:
   level:
     org.rivero.roommanagement: debug
     org.springframework.web: debug
+    org.postgresql: trace
+    java.sql: trace

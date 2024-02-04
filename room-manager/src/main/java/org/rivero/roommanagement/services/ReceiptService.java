@@ -1,7 +1,8 @@
 package org.rivero.roommanagement.services;
 
 import lombok.RequiredArgsConstructor;
-import org.rivero.roommanagement.dtos.ReceiptDTO;
+import org.rivero.roommanagement.dtos.ReceiptDto;
+import org.rivero.roommanagement.dtos.UserInfo;
 import org.rivero.roommanagement.entities.MoneyConsumeEvent;
 import org.rivero.roommanagement.entities.ReceiptConsumer;
 import org.rivero.roommanagement.entities.Report;
@@ -15,39 +16,39 @@ import org.rivero.roommanagement.request.ReceiptUpdateRequest;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class ReceiptService {
-    private  final MoneyConsumeEventRepository moneyConsumeEventRepository;
-    private  final UserRepository userRepository ;
+    private final MoneyConsumeEventRepository moneyConsumeEventRepository;
+    private final UserRepository userRepository;
     private final ReceiptDTOMapper receiptDTOMapper;
 
     DBConnectionManager dbConnectionManager = new DBConnectionManager();
     Connection connection = dbConnectionManager.connect();
 
 
-    public ReceiptDTO getReceiptById(String id) {
+    public ReceiptDto getReceiptById(String id) {
         return moneyConsumeEventRepository.getOne(connection, id);
     }
 
-    public List<MoneyConsumeEvent> getAllReceipt(String fromDate,String  toDate) {
-        if(fromDate != null && toDate != null)
-            return moneyConsumeEventRepository.getList(connection, fromDate, toDate);
-        return moneyConsumeEventRepository.getList(connection);
+    public List<MoneyConsumeEvent> getAllReceipt(ZonedDateTime fromDate, ZonedDateTime toDate, UserInfo userInfo) {
+        if (fromDate != null && toDate != null)
+            return moneyConsumeEventRepository.getList(connection, fromDate, toDate, userInfo.id());
+        return moneyConsumeEventRepository.getList(connection, fromDate, toDate, userInfo.id());
     }
 
-    public void create(ReceiptCreateRequest request) {
+    public void create(ReceiptCreateRequest request, UserInfo userInfo) {
         String id = UUID.randomUUID().toString();
         moneyConsumeEventRepository.insert(connection, request, id);
         request.consumerList().forEach(consumer -> {
             this.createReceiptConsumer(new ReceiptConsumer(UUID.randomUUID().toString(), id, consumer));
-            userRepository.increaseUserDebt(connection, request.moneyAmount() / request.consumerList().size(), consumer);
+            userRepository.increaseUserDebt(connection, request.moneyAmount() / request.consumerList().size(), consumer, userInfo);
         });
         userRepository.increaseUserBalance(connection, request.moneyAmount(), request.buyerId());
     }
@@ -58,7 +59,7 @@ public class ReceiptService {
         moneyConsumeEventRepository.deleteOne(connection, id);
     }
 
-    public void updateOne(ReceiptUpdateRequest receipt){
+    public void updateOne(ReceiptUpdateRequest receipt) {
         moneyConsumeEventRepository.updateOne(connection, receipt);
     }
 
@@ -79,11 +80,11 @@ public class ReceiptService {
         return "Record deleted";
     }
 
-    public Report createReport(String userId){
+    public Report createReport(String userId) {
         List<ReceiptConsumer> receiptConsumers = moneyConsumeEventRepository.getListReceiptConsumerByUserId(connection, userId);
-        List<ReceiptDTO> consumedList = new ArrayList<>();
+        List<ReceiptDto> consumedList = new ArrayList<>();
         receiptConsumers.forEach(item -> {
-            ReceiptDTO result = moneyConsumeEventRepository.getOne(connection, item.getReceiptId());
+            ReceiptDto result = moneyConsumeEventRepository.getOne(connection, item.getReceiptId());
             this.getByReceiptId(result.id()).forEach(data -> {
                 result.consumerList().add(data.getConsumerId());
             });
@@ -91,6 +92,6 @@ public class ReceiptService {
         });
         List<MoneyConsumeEvent> paidList = moneyConsumeEventRepository.getListByUserId(connection, userId);
         User user = userRepository.getOne(connection, userId);
-        return new Report(UUID.randomUUID().toString(),  consumedList, paidList.stream().map(receiptDTOMapper).collect(Collectors.toList()), userId, user.getBalance(), user.getDebt());
+        return new Report(UUID.randomUUID().toString(), consumedList, paidList.stream().map(receiptDTOMapper).collect(Collectors.toList()), userId, user.getBalance(), user.getDebt());
     }
 }
