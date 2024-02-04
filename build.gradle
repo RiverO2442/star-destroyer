@@ -10,6 +10,9 @@ plugins {
 allprojects {
     repositories {
         mavenCentral()
+        maven {
+            url "https://reposilite.tiktzuki.com/releases"
+        }
     }
     java {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -35,8 +38,13 @@ subprojects {
     apply plugin: "org.jetbrains.kotlin.plugin.jpa"
     apply plugin: "org.springframework.boot"
     apply plugin: "io.spring.dependency-management"
-
-    test {
-        useJUnitPlatform()
+    dependencies {
+        implementation "org.dyson:core:0.0.1"
     }
+}
+
+apply from: "$rootDir/room-manager/build.gradle"
+
+test {
+    useJUnitPlatform()
 }

@@ -8,11 +8,11 @@
 #docker push tiktzuki/todo-web:latest
 
 build_jar(){
-  ./gradlew clean bootjar
+  ./gradlew clean room-manager:bootjar
 }
 
 build_docker() {
-  docker build -t tiktuzki/star-destroyer-api:latest .
+  docker build -t tiktuzki/star-destroyer-api:latest room-manager
 }
 
 if [ "$1" = "build-jar" ] ; then
