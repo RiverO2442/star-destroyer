@@ -19,18 +19,6 @@ allprojects {
     }
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor "org.projectlombok:lombok:1.18.30"
-    implementation 'org.postgresql:postgresql:42.7.1'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0"
-}
-
-
-// subproject
 subprojects {
     apply plugin: "java-library"
     apply plugin: "org.jetbrains.kotlin.jvm"
@@ -38,9 +26,6 @@ subprojects {
     apply plugin: "org.jetbrains.kotlin.plugin.jpa"
     apply plugin: "org.springframework.boot"
     apply plugin: "io.spring.dependency-management"
-    dependencies {
-        implementation "org.dyson:core:0.0.1"
-    }
 }
 
 apply from: "$rootDir/room-manager/build.gradle"
