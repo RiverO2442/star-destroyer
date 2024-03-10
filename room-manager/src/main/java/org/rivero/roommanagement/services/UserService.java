@@ -29,15 +29,15 @@ public class UserService {
     public static final String TOKEN_ISSUER = "room-manager-service";
     public static final String SECRET_KEY = "my-secret-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz";
 
-    private final UserRepository userRepository = new UserRepository();
-    DBConnectionManager dbConnectionManager = new DBConnectionManager();
-    Connection connection = dbConnectionManager.connect();
+    final UserRepository userRepository;
+
+    final DBConnectionManager dbConnectionManager;
 
     public String login(LoginRequest request) {
         if (DigestUtils.md5DigestAsHex(request.password().getBytes(StandardCharsets.UTF_8))
-                .equals(userRepository.getPasswordHash(connection, request.username()))) {
+                .equals(userRepository.getPasswordHash(request.username()))) {
 
-            User user = userRepository.getByUsername(connection, request.username())
+            User user = userRepository.getByUsername(request.username())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "user not found"));
 
             return generateToken(user).compact();
@@ -58,25 +58,25 @@ public class UserService {
     }
 
     public User getUserById(String id) {
-        return userRepository.getOne(connection, id);
+        return userRepository.getOne(id);
     }
 
     public List<User> getAllUser() {
-        return userRepository.getList(connection);
+        return userRepository.getList();
     }
 
     public void register(User user) {
-        if (userRepository.getPasswordHash(connection, user.getName()).isEmpty()) {
-            userRepository.insert(connection, user);
+        if (userRepository.getPasswordHash(user.getName()).isEmpty()) {
+            userRepository.insert(user);
         }
     }
 
     public void deleteOne(String id) {
-        userRepository.deleteOne(connection, id);
+        userRepository.deleteOne(id);
     }
 
     public void updateOne(UserUpdateRequest userUpdateRequest, String id) {
-        userRepository.updateOne(connection, userUpdateRequest, id);
+        userRepository.updateOne(userUpdateRequest, id);
     }
 
     public UserInfo authorize(String token) {

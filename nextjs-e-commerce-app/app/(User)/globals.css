@@ -1,0 +1,95 @@
+/* *{
+    outline: red solid 2px;
+} */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    max-width: 100vw;
+}
+h3{
+    font-size: 1.5rem/* 24px */;
+    line-height: 2rem/* 32px */;
+}
+
+main{
+    min-height: 400px;
+}
+
+.product-list-div{
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem/* 20px */;
+    flex-wrap: wrap;
+}
+
+@media (min-width: 600px) {
+    .product-list-div{
+            gap: 2rem;
+        }
+}
+@media (min-width: 1280px) {
+    .product-list-div{
+            gap: 5rem;
+        }
+}
+
+.price-tag-multiple{
+    overflow-x: hidden;
+    font-size: 1.5rem/* 24px */;
+    line-height: 2rem/* 32px */;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    column-gap: 0.5rem/* 8px */;
+    flex-direction: column;
+   
+}
+
+.loading-300{
+    background-repeat: no-repeat;
+    animation: loader-300 3s infinite;
+    animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+
+
+
+@keyframes loader-300 {
+    0%{
+        background-position: 0px;
+    }
+    50%{
+        background-position: 300px;
+    }
+    100%{
+        background-position: 0px;
+    }
+}
+
+.loading-100{
+    background-repeat: no-repeat;
+    animation: loader-100 3s infinite;
+    animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+@keyframes loader-100 {
+    0%{
+        background-position: 0px;
+    }
+    50%{
+        background-position: 100px;
+    }
+    100%{
+        background-position: 0px;
+    }
+}
+
+
+
+#categories li:nth-child(even) div span{
+
+    right:0px;
+}

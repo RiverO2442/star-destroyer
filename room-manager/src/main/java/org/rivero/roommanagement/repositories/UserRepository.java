@@ -1,5 +1,6 @@
 package org.rivero.roommanagement.repositories;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.rivero.roommanagement.dtos.UserInfo;
 import org.rivero.roommanagement.entities.User;
@@ -15,10 +16,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
+@RequiredArgsConstructor
 public class UserRepository {
-    public List<User> getList(Connection connection) {
-        Statement statement = null;
-        try {
+    final DBConnectionManager connectionManager;
+
+    public List<User> getList() {
+        Statement statement;
+        try (Connection connection = connectionManager.connect()) {
             statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM user_tbl");
             List<User> users = new ArrayList<>();
@@ -36,8 +40,8 @@ public class UserRepository {
         }
     }
 
-    public void deleteOne(Connection connection, String id) {
-        try {
+    public void deleteOne(String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM user_tbl WHERE id = ?");
             preparedStatement.setString(1, id);
             preparedStatement.execute();
@@ -46,8 +50,8 @@ public class UserRepository {
         }
     }
 
-    public void updateOne(Connection connection, UserUpdateRequest userUpdateRequest, String id) {
-        try {
+    public void updateOne(UserUpdateRequest userUpdateRequest, String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user_tbl SET passwordhash = ? WHERE  id = ?");
             preparedStatement.setString(1, DigestUtils.md5DigestAsHex(userUpdateRequest.passwordHash().getBytes(StandardCharsets.UTF_8)));
             preparedStatement.setString(2, id);
@@ -56,8 +60,8 @@ public class UserRepository {
         }
     }
 
-    public void increaseUserDebt(Connection connection, int amount, String id, UserInfo userInfo) {
-        try {
+    public void increaseUserDebt(int amount, String id, UserInfo userInfo) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user_tbl SET debt = debt + ? WHERE id = ?");
             preparedStatement.setInt(1, amount);
             preparedStatement.setString(2, id);
@@ -68,8 +72,8 @@ public class UserRepository {
 
     }
 
-    public void increaseUserBalance(Connection connection, int amount, String id) {
-        try {
+    public void increaseUserBalance(int amount, String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user_tbl SET balance = balance + ? WHERE id = ?");
             preparedStatement.setInt(1, amount);
             preparedStatement.setString(2, id);
@@ -79,8 +83,8 @@ public class UserRepository {
         }
     }
 
-    public User getOne(Connection connection, String id) {
-        try {
+    public User getOne(String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user_tbl WHERE id = ?");
             preparedStatement.setString(1, id);
             ResultSet rs;
@@ -100,25 +104,27 @@ public class UserRepository {
     }
 
     @SneakyThrows
-    public Optional<User> getByUsername(Connection connection, String username) {
-        PreparedStatement preparedStatement = null;
-        preparedStatement = connection.prepareStatement("SELECT * FROM user_tbl WHERE username = ?");
-        preparedStatement.setString(1, username);
-        ResultSet rs;
-        rs = preparedStatement.executeQuery();
-        if (rs.next()) {
-            String userId = rs.getString("id");
-            String password = rs.getString("passwordHash");
-            int balance = rs.getInt("balance");
-            int debt = rs.getInt("debt");
-            return Optional.of(new User(userId, username, password, 0, balance, debt));
+    public Optional<User> getByUsername(String username) {
+        try (Connection connection = connectionManager.connect()) {
+            PreparedStatement preparedStatement = null;
+            preparedStatement = connection.prepareStatement("SELECT * FROM user_tbl WHERE username = ?");
+            preparedStatement.setString(1, username);
+            ResultSet rs;
+            rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                String userId = rs.getString("id");
+                String password = rs.getString("passwordHash");
+                int balance = rs.getInt("balance");
+                int debt = rs.getInt("debt");
+                return Optional.of(new User(userId, username, password, 0, balance, debt));
+            }
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
-    public void insert(Connection connection, User user) {
-        PreparedStatement preparedStatement = null;
-        try {
+    public void insert(User user) {
+        PreparedStatement preparedStatement;
+        try (Connection connection = connectionManager.connect()) {
             preparedStatement = connection.prepareStatement("INSERT INTO user_tbl VALUES (?, ?, ?)");
             preparedStatement.setString(1, UUID.randomUUID().toString());
             preparedStatement.setString(2, user.getName());
@@ -130,9 +136,9 @@ public class UserRepository {
 
     }
 
-    public String getPasswordHash(Connection connection, String username) {
+    public String getPasswordHash(String username) {
         PreparedStatement preparedStatement = null;
-        try {
+        try (Connection connection = connectionManager.connect()) {
             preparedStatement = connection.prepareStatement("SELECT  * FROM user_tbl WHERE username = ?");
             preparedStatement.setString(1, username);
             ResultSet rs = preparedStatement.executeQuery();

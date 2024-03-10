@@ -1,21 +1,22 @@
 package org.rivero.roommanagement.repositories;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Component
+@RequiredArgsConstructor
 public class DBConnectionManager {
-    String hostName = "14.225.205.235:35432";
-    String dbName = "room_manager";
-    String username = "postgres";
-    String password = "P@ssword789";
-
+    final DatasourceProperties properties;
     public Connection connect() {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(
-                    String.format("jdbc:postgresql://%s/%s", hostName, dbName),
-                    username, password);
+                    properties.getUrl(),
+                    properties.getUsername(), properties.getPassword());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

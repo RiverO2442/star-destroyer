@@ -1,6 +1,7 @@
 package org.rivero.roommanagement.repositories;
 
 import jakarta.annotation.Nullable;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.rivero.roommanagement.dtos.ReceiptDto;
 import org.rivero.roommanagement.entities.MoneyConsumeEvent;
@@ -21,14 +22,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Repository
+@RequiredArgsConstructor
 public class MoneyConsumeEventRepository {
+    final DBConnectionManager connectionManager;
+
     public String getZonedId(String userId) {
         // TODO: complete me
         return "+07:00";
     }
 
-    public List<MoneyConsumeEvent> getList(Connection connection, @Nullable ZonedDateTime from, @Nullable ZonedDateTime to, String userId) {
-        try {
+    public List<MoneyConsumeEvent> getList(@Nullable ZonedDateTime from, @Nullable ZonedDateTime to, String userId) {
+        try(Connection connection = connectionManager.connect()) {
             ZonedDateTime now = ZonedDateTime.now(ZoneId.of(getZonedId(userId)));
             ZonedDateTime firstOfMonthAtAsia = now.withDayOfMonth(1);
             ZonedDateTime lastOfMonthAtAsia = now.withDayOfMonth(now.getDayOfMonth());
@@ -67,7 +71,7 @@ public class MoneyConsumeEventRepository {
                 Timestamp time = rs.getTimestamp("createddate");
                 receipts.forEach(rc -> {
                     if (rc.getId().equals(receipt_id)) {
-                        rc.getConsumerList().add(consumerid);
+                        rc.getConsumers().add(consumerid);
                         isExisted.set(true);
                     }
                 });
@@ -115,8 +119,8 @@ public class MoneyConsumeEventRepository {
 //        }
 //    }
 
-    public List<MoneyConsumeEvent> getListByUserId(Connection connection, String userId) {
-        try {
+    public List<MoneyConsumeEvent> getListByUserId(String userId) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM receipt left join receipt_consumer rc on receipt.id = rc.receiptid WHERE buyerid = ?");
             statement.setString(1, userId);
             ResultSet rs = statement.executeQuery();
@@ -132,7 +136,7 @@ public class MoneyConsumeEventRepository {
                 Timestamp time = rs.getTimestamp("createddate");
                 receipts.forEach(rc -> {
                     if (rc.getId().equals(receipt_id)) {
-                        rc.getConsumerList().add(consumerid);
+                        rc.getConsumers().add(consumerid);
                     }
                     isExisted.set(true);
                 });
@@ -146,8 +150,8 @@ public class MoneyConsumeEventRepository {
         }
     }
 
-    public void updateOne(Connection connection, ReceiptUpdateRequest receipt) {
-        try {
+    public void updateOne(ReceiptUpdateRequest receipt) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE receipt SET moneyamount = ? ,buyerid = ?, name = ?, description = ? WHERE id = ?");
             statement.setInt(1, receipt.moneyAmount());
             statement.setString(2, receipt.buyerId());
@@ -160,8 +164,8 @@ public class MoneyConsumeEventRepository {
         }
     }
 
-    public ReceiptDto getOne(Connection connection, String id) {
-        try {
+    public ReceiptDto getOne(String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = null;
             preparedStatement = connection.prepareStatement("SELECT * FROM receipt WHERE id = ?");
             preparedStatement.setString(1, id);
@@ -183,8 +187,8 @@ public class MoneyConsumeEventRepository {
         return null;
     }
 
-    public void insert(Connection connection, ReceiptCreateRequest receipt, String id) {
-        try {
+    public void insert(ReceiptCreateRequest receipt, String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO receipt VALUES (?, ?, ?, ?, ?, ?)");
             preparedStatement.setString(1, id);
             preparedStatement.setInt(2, receipt.moneyAmount());
@@ -199,8 +203,8 @@ public class MoneyConsumeEventRepository {
 
     }
 
-    public void deleteOne(Connection connection, String id) {
-        try {
+    public void deleteOne(String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM receipt WHERE id = ? ");
             preparedStatement.setString(1, id);
             preparedStatement.execute();
@@ -210,8 +214,8 @@ public class MoneyConsumeEventRepository {
 
     }
 
-    public ArrayList<ReceiptConsumer> getListReceiptConsumerByUserId(Connection connection, String id) {
-        try {
+    public ArrayList<ReceiptConsumer> getListReceiptConsumerByUserId(String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE consumerid = ?");
             preparedStatement.setString(1, id);
 //            preparedStatement.setString(2, "2023-12-26");
@@ -229,8 +233,8 @@ public class MoneyConsumeEventRepository {
         }
     }
 
-    public ArrayList<ReceiptConsumer> getListReceiptConsumerByReceiptId(Connection connection, String id) {
-        try {
+    public ArrayList<ReceiptConsumer> getListReceiptConsumerByReceiptId(String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM receipt_consumer WHERE receiptid = ?");
             preparedStatement.setString(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -247,8 +251,8 @@ public class MoneyConsumeEventRepository {
         }
     }
 
-    public void insertReceiptConsumer(Connection connection, ReceiptConsumer receiptConsumer) {
-        try {
+    public void insertReceiptConsumer(ReceiptConsumer receiptConsumer) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO receipt_consumer VALUES (?, ?, ?)");
             preparedStatement.setString(1, UUID.randomUUID().toString());
             preparedStatement.setString(2, receiptConsumer.getConsumerId());
@@ -259,8 +263,8 @@ public class MoneyConsumeEventRepository {
         }
     }
 
-    public void deleteOneReceiptConsumer(Connection connection, String id) {
-        try {
+    public void deleteOneReceiptConsumer(String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM receipt_consumer WHERE id = ? ");
             preparedStatement.setString(1, id);
             preparedStatement.execute();

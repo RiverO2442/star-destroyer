@@ -7,7 +7,7 @@ public record ReceiptDto(
         String name,
         int moneyAmount,
         String buyerId,
-        List<String> consumerList,
+        List<String> consumers,
         String id,
         String description,
         ZonedDateTime createDate

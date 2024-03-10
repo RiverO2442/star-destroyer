@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -18,7 +18,7 @@ public class MealController {
     private final MealService mealService;
 
     @GetMapping("/meals")
-    public ResponseEntity<List<MealCheckListDto>> getList() {
+    public ResponseEntity<Collection<MealCheckListDto>> getList() {
         return ResponseEntity.ok().body(mealService.getList());
     }
 

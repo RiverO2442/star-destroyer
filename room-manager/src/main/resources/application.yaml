@@ -8,21 +8,64 @@ spring:
   threads:
     virtual:
       enabled: true
-springdoc:
-  api-docs:
-    path: /api-docs
-  show-actuator: false
-  show-login-endpoint: true
-  swagger-ui:
-    operations-sorter: alpha
-    tags-sorter: alpha
-    config-url: /api-docs/swagger-config
-    url: /api-docs
-    disable-swagger-default-url: true
-    oauth2-redirect-url: /swagger-ui/oauth2-redirect.html
+  datasource:
+    url: jdbc:postgresql://localhost:5432/room-manager
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 759254302934
+            client-secret: GOCSPX
+            redirect-uri: http://localhost:3000
+            scope:
+              - email
+              - profile
+          github:
+            client-id: 74de25564
+            client-secret: 4b75
+            redirect-uri: http://localhost:3000
+            scope:
+              - email
+              - profile
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
+            user-name-attribute: sub
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
+dyson:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/room-manager
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+#springdoc:
+#  api-docs:
+#    path: /api-docs
+#  show-actuator: false
+#  show-login-endpoint: true
+#  swagger-ui:
+#    operations-sorter: alpha
+#    tags-sorter: alpha
+#    config-url: /api-docs/swagger-config
+#    url: /api-docs
+#    disable-swagger-default-url: true
+#    oauth2-redirect-url: /swagger-ui/oauth2-redirect.html
 logging:
   level:
     org.rivero.roommanagement: debug
     org.springframework.web: debug
-    org.postgresql: trace
-    java.sql: trace
+    org.postgresql: info
+    java.sql: info
+    org.springdoc: debug

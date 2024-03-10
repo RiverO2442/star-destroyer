@@ -39,9 +39,9 @@ public class User {
     void increaseUserBalance(int amount) {
         this.balance = this.balance + amount;
     }
-//    MoneyConsumeEvent createMoneyConsumeEvent(List<String> consumerList){
+//    MoneyConsumeEvent createMoneyConsumeEvent(List<String> consumers){
 //        int price = 1000;
-//        MoneyConsumeEvent event = new MoneyConsumeEvent("Mua do an BHX", price, this.id, consumerList, "mua com trung ca thit" );
+//        MoneyConsumeEvent event = new MoneyConsumeEvent("Mua do an BHX", price, this.id, consumers, "mua com trung ca thit" );
 //        this.balance = this.balance + price;
 //        return event;
 //    }

@@ -1,39 +1,47 @@
 package org.rivero.roommanagement.controllers;
 
+import io.swagger.v3.oas.annotations.headers.Header;
 import lombok.RequiredArgsConstructor;
 import org.rivero.roommanagement.dtos.ReceiptDto;
 import org.rivero.roommanagement.dtos.UserInfo;
-import org.rivero.roommanagement.mapper.ReceiptDTOMapper;
 import org.rivero.roommanagement.request.ReceiptCreateRequest;
 import org.rivero.roommanagement.request.ReceiptUpdateRequest;
 import org.rivero.roommanagement.services.ReceiptService;
 import org.rivero.roommanagement.services.UserService;
+import org.springframework.boot.actuate.endpoint.SecurityContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ReceiptController {
-
     private final ReceiptService receiptService;
-    private final ReceiptDTOMapper receiptDTOMapper;
     private final UserService userService;
 
     @GetMapping("/receipts")
-    public List<ReceiptDto> getReceipt(
+    public Page<ReceiptDto> getReceipt(
             @RequestParam(required = false) ZonedDateTime fromDate,
-            @RequestParam(required = false) ZonedDateTime toDate,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+            @RequestParam(required = false) ZonedDateTime toDate
     ) {
-        UserInfo userInfo = userService.authorize(token);
-        return receiptService.getAllReceipt(fromDate, toDate, userInfo).stream().map(receiptDTOMapper).collect(Collectors.toList());
+//        UserInfo userInfo = userService.authorize(token);
+        return new PageImpl<>(receiptService.getAllReceipt(fromDate, toDate, null).stream()
+                .map(moneyConsumeEvent -> new ReceiptDto(
+                        moneyConsumeEvent.getName(),
+                        moneyConsumeEvent.getMoneyAmount(),
+                        moneyConsumeEvent.getBuyerId(),
+                        moneyConsumeEvent.getConsumers(),
+                        moneyConsumeEvent.getId(),
+                        moneyConsumeEvent.getDescription(),
+                        moneyConsumeEvent.getCreatedDate()
+
+                )).toList());
     }
 
     @PutMapping("/receipts")
@@ -61,7 +69,7 @@ public class ReceiptController {
                     receipt.name(),
                     receipt.moneyAmount(),
                     receipt.buyerId(),
-                    receipt.consumerList(),
+                    receipt.consumers(),
                     receipt.id(),
                     receipt.description(),
                     receipt.createDate()

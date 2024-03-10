@@ -6,30 +6,28 @@ import org.rivero.roommanagement.repositories.DBConnectionManager;
 import org.rivero.roommanagement.repositories.ReceiptConsumerRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.util.ArrayList;
+import java.util.List;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ReceiptConsumerService {
     private final ReceiptConsumerRepository receiptConsumerRepository;
-    DBConnectionManager dbConnectionManager = new DBConnectionManager();
-    Connection connection = dbConnectionManager.connect();
+    final DBConnectionManager dbConnectionManager;
 
     public void create(ReceiptConsumer request) {
-        receiptConsumerRepository.insert(connection, request);
+        receiptConsumerRepository.insert(request);
     }
 
-    public ArrayList<ReceiptConsumer> getByUserId(String id) {
-        return receiptConsumerRepository.getListByUserId(connection, id);
+    public List<ReceiptConsumer> getByUserId(String id) {
+        return receiptConsumerRepository.getListByUserId(id);
     }
 
-    public ArrayList<ReceiptConsumer> getByReceiptId(String id) {
-        return receiptConsumerRepository.getListByReceiptId(connection, id);
+    public List<ReceiptConsumer> getByReceiptId(String id) {
+        return receiptConsumerRepository.getListByReceiptId(id);
     }
 
-    public String dealeteOne(String id) {
-        receiptConsumerRepository.deleteOne(connection, id);
+    public String deleteOne(String id) {
+        receiptConsumerRepository.deleteOne(id);
         return "Record deleted";
     }
 }

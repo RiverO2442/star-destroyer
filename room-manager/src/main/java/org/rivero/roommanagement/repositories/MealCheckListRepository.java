@@ -1,5 +1,6 @@
 package org.rivero.roommanagement.repositories;
 
+import lombok.RequiredArgsConstructor;
 import org.rivero.roommanagement.dtos.MealCheckListDto;
 import org.springframework.stereotype.Repository;
 
@@ -7,12 +8,16 @@ import java.sql.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 
 @Repository
+@RequiredArgsConstructor
 public class MealCheckListRepository {
-    public void insert(Connection connection, MealCheckListDto list) {
-        try {
+    final DBConnectionManager connectionManager;
+
+    public void insert(MealCheckListDto list) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO mealchecklist VALUES (?, ?, ?, ?, ?)");
             preparedStatement.setString(1, UUID.randomUUID().toString());
             preparedStatement.setString(2, list.month());
@@ -25,8 +30,8 @@ public class MealCheckListRepository {
         }
     }
 
-    public ArrayList<MealCheckListDto> getList(Connection connection) {
-        try {
+    public Collection<MealCheckListDto> getList() {
+        try (Connection connection = connectionManager.connect()) {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM mealchecklist");
             ArrayList<MealCheckListDto> resultList = new ArrayList<MealCheckListDto>();
@@ -39,15 +44,13 @@ public class MealCheckListRepository {
                 resultList.add(new MealCheckListDto(id, month, checkList, consumerId, time));
             }
             return resultList;
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public MealCheckListDto getOne(Connection connection, String id) {
-        try {
+    public MealCheckListDto getOne(String id) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM mealchecklist WHERE id = ?");
             preparedStatement.setString(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -65,8 +68,8 @@ public class MealCheckListRepository {
         }
     }
 
-    public void updateOne(Connection connection, MealCheckListDto mealCheckList) {
-        try {
+    public void updateOne(MealCheckListDto mealCheckList) {
+        try (Connection connection = connectionManager.connect()) {
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE mealchecklist SET month = ?, consumerid = ?, checkList = ? WHERE id = ?");
             preparedStatement.setString(1, mealCheckList.month());
             preparedStatement.setString(2, mealCheckList.consumerId());
