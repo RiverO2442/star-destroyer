@@ -1,6 +1,17 @@
+import {useEffect} from "react";
 
-export default function ErrorPage ({reset}:{reset:()=>void}) {
-    return(
+export interface ErrorPageProps {
+    error: Error & { digest?: string },
+    reset: () => void
+}
+
+export default function ErrorPage({error, reset}: ErrorPageProps) {
+    useEffect(() => {
+        // Log the error to an error reporting service
+        console.error(error)
+    }, [error])
+
+    return (
         <div className="
 
                 mb-96
@@ -42,7 +53,7 @@ export default function ErrorPage ({reset}:{reset:()=>void}) {
 
                         hover:bg-blue-500
                         bg-blue-600 rounded-md px-1"
-                    onClick={()=>{
+                    onClick={() => {
 
                         reset()//
 
@@ -59,10 +70,10 @@ export default function ErrorPage ({reset}:{reset:()=>void}) {
                     mt-2
                     hover:bg-blue-500
                     bg-blue-600 rounded-md px-1"
-                        onClick={()=>{
+                        onClick={() => {
 
                             // @ts-ignore
-                            window.location="/"
+                            window.location = "/"
                         }}>
                     Homepage
                 </button>

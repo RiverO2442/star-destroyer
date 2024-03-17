@@ -5,6 +5,8 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.22'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.9.22'
     id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.22'
+    id 'org.jetbrains.kotlin.plugin.lombok' version '1.9.22'
+    id "io.freefair.lombok" version "8.6"
 }
 
 allprojects {
@@ -26,6 +28,8 @@ subprojects {
     apply plugin: "org.jetbrains.kotlin.plugin.jpa"
     apply plugin: "org.springframework.boot"
     apply plugin: "io.spring.dependency-management"
+    apply plugin: "org.jetbrains.kotlin.plugin.lombok"
+    apply plugin: "io.freefair.lombok"
 }
 
 apply from: "$rootDir/room-manager/build.gradle"

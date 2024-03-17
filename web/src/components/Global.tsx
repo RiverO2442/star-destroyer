@@ -1,11 +1,11 @@
 'use client'
 
-import { ReactNode } from "react"
-import { signOut,signIn } from "next-auth/react"
+import {ReactNode} from "react"
+import {signIn, signOut} from "next-auth/react"
 import Link from "next/link"
 
 
-export const CoolButton = ({children}:{children:ReactNode}) => (
+export const CoolButton = ({children}: { children: ReactNode }) => (
 
     <>
         <div
@@ -24,24 +24,23 @@ export const CoolButton = ({children}:{children:ReactNode}) => (
 
 
 export const SignOutButton = () => {
-
-
-    return(
+    return (
         <button
 
             className="
             capitalize hover:underline
             group-hover:underline"
-            onClick={()=>{signOut()}}>
+            onClick={() => {
+                signOut()
+            }}>
             log out
         </button>
     )
 }
 
 
-
 export const NotLoggedIn = () => {
-    return(
+    return (
         <main className="min-h-[70vh] flex flex-col items-center">
             You must login to view this content
             {/*<form*/}
@@ -59,15 +58,12 @@ export const NotLoggedIn = () => {
     )
 }
 
-export const LoginButtons = ({setLoading}:{setLoading:(value:boolean)=>void}) => {
+export const LoginButtons = ({setLoading}: { setLoading: (value: boolean) => void }) => {
+    const providers = ["github", "google"];
 
-
-
-    const providers = ["github","google"];
-
-    const LoginButton = ({provider}:{provider:string}) => (
+    const LoginButton = ({provider}: { provider: string }) => (
         <button
-            onClick={()=>{
+            onClick={() => {
                 setLoading(true);
                 signIn(provider);
             }}
@@ -84,16 +80,15 @@ export const LoginButtons = ({setLoading}:{setLoading:(value:boolean)=>void}) =>
             gap-y-2
             flex flex-col">
             {providers
-                .map(provider=>(
+                .map(provider => (
                     <CoolButton key={provider}>
                         <LoginButton provider={provider}/>
                     </CoolButton>
                 ))}
         </aside>
     )
-
 }
-export const CoolLink = ({href,children}:{href:string,children:ReactNode})=>{
+export const CoolLink = ({href, children}: { href: string, children: ReactNode }) => {
     return (
         <Link
             href={href}

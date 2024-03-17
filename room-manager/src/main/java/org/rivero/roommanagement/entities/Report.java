@@ -2,7 +2,7 @@ package org.rivero.roommanagement.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.rivero.roommanagement.dtos.ReceiptDto;
+import receipt.ReceiptDto;
 
 import java.util.List;
 

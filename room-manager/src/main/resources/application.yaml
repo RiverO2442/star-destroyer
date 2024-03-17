@@ -9,13 +9,13 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/room-manager
+    url: jdbc:postgresql://14.225.205.235:5432/room-manager
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       dialect: org.hibernate.dialect.PostgreSQLDialect
   security:
     oauth2:
@@ -44,12 +44,6 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://accounts.google.com
-dyson:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/room-manager
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
 #springdoc:
 #  api-docs:
 #    path: /api-docs

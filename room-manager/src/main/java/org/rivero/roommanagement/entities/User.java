@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @ToString
@@ -36,8 +38,8 @@ public class User {
         if (this.passwordHash == passwordHash) this.passwordHash = newPasswordHash;
     }
 
-    void increaseUserBalance(int amount) {
-        this.balance = this.balance + amount;
+    void increaseUserBalance(BigDecimal amount) {
+//        this.balance = this.balance + amount;
     }
 //    MoneyConsumeEvent createMoneyConsumeEvent(List<String> consumers){
 //        int price = 1000;

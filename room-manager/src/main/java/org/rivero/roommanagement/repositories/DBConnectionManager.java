@@ -1,6 +1,7 @@
 package org.rivero.roommanagement.repositories;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -10,7 +11,8 @@ import java.sql.SQLException;
 @Component
 @RequiredArgsConstructor
 public class DBConnectionManager {
-    final DatasourceProperties properties;
+    final DataSourceProperties properties;
+
     public Connection connect() {
         Connection connection = null;
         try {

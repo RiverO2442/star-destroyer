@@ -1,20 +1,21 @@
 package org.rivero.roommanagement.controllers;
 
-import io.swagger.v3.oas.annotations.headers.Header;
 import lombok.RequiredArgsConstructor;
-import org.rivero.roommanagement.dtos.ReceiptDto;
 import org.rivero.roommanagement.dtos.UserInfo;
 import org.rivero.roommanagement.request.ReceiptCreateRequest;
 import org.rivero.roommanagement.request.ReceiptUpdateRequest;
 import org.rivero.roommanagement.services.ReceiptService;
 import org.rivero.roommanagement.services.UserService;
-import org.springframework.boot.actuate.endpoint.SecurityContext;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
+import receipt.ReceiptDto;
+import receipt.ReceiptSummary;
 
 import java.time.ZonedDateTime;
 
@@ -26,22 +27,24 @@ public class ReceiptController {
     private final UserService userService;
 
     @GetMapping("/receipts")
-    public Page<ReceiptDto> getReceipt(
+    public Mono<Page<ReceiptSummary>> getReceipt(
             @RequestParam(required = false) ZonedDateTime fromDate,
-            @RequestParam(required = false) ZonedDateTime toDate
+            @RequestParam(required = false) ZonedDateTime toDate,
+            @ParameterObject Pageable pageable
     ) {
 //        UserInfo userInfo = userService.authorize(token);
-        return new PageImpl<>(receiptService.getAllReceipt(fromDate, toDate, null).stream()
-                .map(moneyConsumeEvent -> new ReceiptDto(
-                        moneyConsumeEvent.getName(),
-                        moneyConsumeEvent.getMoneyAmount(),
-                        moneyConsumeEvent.getBuyerId(),
-                        moneyConsumeEvent.getConsumers(),
-                        moneyConsumeEvent.getId(),
-                        moneyConsumeEvent.getDescription(),
-                        moneyConsumeEvent.getCreatedDate()
-
-                )).toList());
+//        return new PageImpl<>(receiptService.getAllReceipt(fromDate, toDate, null).stream()
+//                .map(moneyConsumeEvent -> new ReceiptDto(
+//                        moneyConsumeEvent.getName(),
+//                        moneyConsumeEvent.getMoneyAmount(),
+//                        moneyConsumeEvent.getBuyerId(),
+//                        moneyConsumeEvent.getConsumers(),
+//                        moneyConsumeEvent.getId(),
+//                        moneyConsumeEvent.getDescription(),
+//                        moneyConsumeEvent.getCreatedDate()
+//
+//                )).toList());
+        return receiptService.getAllReceipt(fromDate, toDate, null, pageable);
     }
 
     @PutMapping("/receipts")
@@ -64,16 +67,16 @@ public class ReceiptController {
     @GetMapping("/receipts/{receiptId}")
     public ResponseEntity<ReceiptDto> getReceiptById(@PathVariable(name = "receiptId") String receiptId) {
         ReceiptDto receipt = receiptService.getReceiptById(receiptId);
-        if (receiptService.getReceiptById(receiptId) != null)
-            return ResponseEntity.ok().body(new ReceiptDto(
-                    receipt.name(),
-                    receipt.moneyAmount(),
-                    receipt.buyerId(),
-                    receipt.consumers(),
-                    receipt.id(),
-                    receipt.description(),
-                    receipt.createDate()
-            ));
+//        if (receiptService.getReceiptById(receiptId) != null)
+//            return ResponseEntity.ok().body(new ReceiptDto(
+//                    receipt.name(),
+//                    receipt.moneyAmount(),
+//                    receipt.buyerId(),
+//                    receipt.consumers(),
+//                    receipt.id(),
+//                    receipt.description(),
+//                    receipt.createDate()
+//            ));
         return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
     }
 

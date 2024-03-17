@@ -1,3 +1,7 @@
+export interface ReceiptSummary {
+   id: string,
+}
+
 export interface Receipt {
     name: string,
     moneyAmount: number,

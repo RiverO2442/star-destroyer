@@ -9,6 +9,6 @@ export interface PaginationMeta {
     };
 }
 
-export interface PageResponse {
-
+export interface PageResponse<T> {
+    items: T[]
 }
