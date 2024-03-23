@@ -3,8 +3,9 @@ import Image from "next/image"
 import SortBy from "./SortBy";
 import {redirect} from "next/navigation"
 import {fetchItemsADMIN} from "@/app/(admin)/api/items";
+import ReceiptInfiniteScroll from "@/app/(admin)/admin/receipts/[page]/[...sortBy]/ReceiptInfiniteScroll";
 
-const ItemsList = async ({params}: { params: { page: string, sortBy: string[] } }) => {
+const ReceiptsPage = async ({params}: { params: { page: string, sortBy: string[] } }) => {
 
     const limit = 4;
 
@@ -51,7 +52,6 @@ const ItemsList = async ({params}: { params: { page: string, sortBy: string[] } 
             justify-start
             text-center
             overflow-x-hidden
-
             ">
 
             <div className="xs:w-3/4 w-full
@@ -59,13 +59,9 @@ const ItemsList = async ({params}: { params: { page: string, sortBy: string[] } 
             flex flex-col items-center 
             justify-start">
 
+                <h1 className="text-2xl my-2">Items</h1>
 
-                <h1
-                    className="text-2xl my-2">Items</h1>
-
-
-                <ul
-                    className="w-full">
+                <ul className="w-full">
 
                     <li
                         className="
@@ -190,4 +186,4 @@ const ItemsList = async ({params}: { params: { page: string, sortBy: string[] } 
     )
 }
 
-export default ItemsList;
+export default ReceiptsPage;

@@ -13,26 +13,35 @@ export const authOptions: AuthOptions = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         })
     ],
-
     callbacks: {
         async jwt({token, user, account, profile}) {
+            if (account && account.provider === "google") {
+                token.accessToken = account.id_token
+            }
             return token;
         },
         async redirect({baseUrl}) {
             return "/"
-        }
-        // async session({session, token, user}) {
-        //     // Send properties to the client, like an access_token from a provider.
-        //     console.log("session", session);
-        //     return session;
-        // }
+        },
+        async session({token, session}) {
+            // Send properties to the client, like an access_token and user id from a provider.
+            console.log("Session: ", session, token)
+            return {
+                ...session,
+                accessToken: token.accessToken
+            }
+        },
     },
     pages: {
         signIn: "/signin",
         error: "/signin/error"
-    }
+    },
+    session: {
+        strategy: "jwt"
+    },
+    debug: true,
+    secret: process.env.NEXTAUTH_SECRET,
 }
-
-const handler = NextAuth(authOptions)
+const handler = NextAuth(authOptions);
 
 export {handler as GET, handler as POST}

@@ -36,7 +36,7 @@
         <appender-ref ref="RollingFile"/>
     </root>
 
-    <logger name="org.rivero.roommanagement" level="info" additivity="false">
+    <logger name="org.rivero.roommanager" level="info" additivity="false">
         <appender-ref ref="Console"/>
         <appender-ref ref="RollingFile"/>
     </logger>

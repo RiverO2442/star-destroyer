@@ -22,19 +22,19 @@ spring:
       client:
         registration:
           google:
-            client-id: 759254302934
-            client-secret: GOCSPX
+            client-id: 759254302934-h0u67i38q8idqkvvjr5v0dmfmni59a0m.apps.googleusercontent.com
+            client-secret: secret
             redirect-uri: http://localhost:3000
             scope:
               - email
               - profile
-          github:
-            client-id: 74de25564
-            client-secret: 4b75
-            redirect-uri: http://localhost:3000
-            scope:
-              - email
-              - profile
+        #          github:
+        #            client-id: 74de25564
+        #            client-secret: 4b75
+        #            redirect-uri: http://localhost:3000
+        #            scope:
+        #              - email
+        #              - profile
         provider:
           google:
             authorization-uri: https://accounts.google.com/o/oauth2/auth
@@ -58,7 +58,7 @@ spring:
 #    oauth2-redirect-url: /swagger-ui/oauth2-redirect.html
 logging:
   level:
-    org.rivero.roommanagement: debug
+    org.rivero.roommanager: debug
     org.springframework.web: debug
     org.postgresql: info
     java.sql: info

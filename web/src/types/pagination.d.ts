@@ -10,5 +10,16 @@ export interface PaginationMeta {
 }
 
 export interface PageResponse<T> {
-    items: T[]
+    content: T[],
+    totalPages: number,
+    totalElements: number,
+    first: boolean,
+    last: boolean,
+    size: number,
+    number: number
+}
+
+export type MetadataItem = {
+    id: string,
+    name: string
 }

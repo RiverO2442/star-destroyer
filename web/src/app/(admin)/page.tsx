@@ -5,10 +5,8 @@ import {CoolButton, CoolLink} from "@/components/Global";
 
 export default async function Home() {
 
-
     return (
         <main>
-
             <section className="text-lg">
                 <p>
                     <span className="text-2xl">Welcome to <em>The Cool Webstore</em>!</span>

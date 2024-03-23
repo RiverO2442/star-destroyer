@@ -1,0 +1,34 @@
+{
+  "tokenValue": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImFkZjVlNzEwZWRmZWJlY2JlZmE5YTYxNDk1NjU0ZDAzYzBiOGVkZjgiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI3NTkyNTQzMDI5MzQtaDB1NjdpMzhxOGlkcWt2dmpyNXYwZG1mbW5pNTlhMG0uYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI3NTkyNTQzMDI5MzQtaDB1NjdpMzhxOGlkcWt2dmpyNXYwZG1mbW5pNTlhMG0uYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDU1MDgyNzc1MDk1MDc2OTk1MzEiLCJlbWFpbCI6InRyYW5waGFudGhhbmhsb25nMThAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJyX2xCcHZZSVdfUFhGYTBEdnZyNGVBIiwibmFtZSI6IlRy4bqnbiBQaGFuIFRoYW5oIExvbmciLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jTFVRN1ZlVF9uVWIyZDVTcmpoUU1jM3JKeWNmOS03WDBjOExFbmxJSmh3cVE9czk2LWMiLCJnaXZlbl9uYW1lIjoiVHLhuqduIFBoYW4iLCJmYW1pbHlfbmFtZSI6IlRoYW5oIExvbmciLCJpYXQiOjE3MTEyMDQ0NTMsImV4cCI6MTcxMTIwODA1M30.YBmHXSigvCZKkVKkxx5-MiRbTDU-CJLxMYeaofwutAYs3EGSYjD_cNZBT7Nl9bjcrcJfRMaSIpRmk6PCwvXmzIqiF2FOONajgN13ScjssyqATkcQOMyasi0NeiAriGmQwEXyZdQd5upCo9qcBybPgRZXcjpRae_fHoAZqnKb2C6w-4ixoyYACqXitkwKRb-C_kTAqk6-pl6ZtbFBRkfG0MCFSmoAnXt2F7_gHuY6GKPFxu_sdxbbP2AtDconkL5eVDLdZupsd_ZceUFWketbXqPStVl_-DYvGx-j_TJJbpkyk7iGQIfCmVGdn3jJBmdPBeA3Ln78zxB9C-K2R6mVfQ",
+  "issuedAt": "2024-03-23T14:34:13Z",
+  "expiresAt": "2024-03-23T15:34:13Z",
+  "headers": {
+    "kid": "adf5e710edfebecbefa9a61495654d03c0b8edf8",
+    "typ": "JWT",
+    "alg": "RS256"
+  },
+  "claims": {
+    "at_hash": "r_lBpvYIW_PXFa0Dvvr4eA",
+    "sub": "105508277509507699531",
+    "email_verified": true,
+    "iss": "https://accounts.google.com",
+    "given_name": "Trần Phan",
+    "picture": "https://lh3.googleusercontent.com/a/ACg8ocLUQ7VeT_nUb2d5SrjhQMc3rJycf9-7X0c8LEnlIJhwqQ=s96-c",
+    "aud": [
+      "759254302934-h0u67i38q8idqkvvjr5v0dmfmni59a0m.apps.googleusercontent.com"
+    ],
+    "azp": "759254302934-h0u67i38q8idqkvvjr5v0dmfmni59a0m.apps.googleusercontent.com",
+    "name": "Trần Phan Thanh Long",
+    "exp": "2024-03-23T15:34:13Z",
+    "family_name": "Thanh Long",
+    "iat": "2024-03-23T14:34:13Z",
+    "email": "tranphanthanhlong18@gmail.com"
+  },
+  "notBefore": null,
+  "id": null,
+  "subject": "105508277509507699531",
+  "issuer": "https://accounts.google.com",
+  "audience": [
+    "759254302934-h0u67i38q8idqkvvjr5v0dmfmni59a0m.apps.googleusercontent.com"
+  ]
+}

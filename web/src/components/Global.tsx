@@ -3,24 +3,35 @@
 import {ReactNode} from "react"
 import {signIn, signOut} from "next-auth/react"
 import Link from "next/link"
+import {useFormStatus} from "react-dom";
+import {Button, ButtonProps} from "@mui/material";
 
 
-export const CoolButton = ({children}: { children: ReactNode }) => (
-
-    <>
+export const CoolButton = ({children}: { children: ReactNode }) => {
+    return <>
         <div
             className="
-            flex items-center justify-center
-            w-fit
-            text-slate-700
-            bg-slate-300 hover:bg-slate-100
-            rounded-md">
-
+    flex items-center justify-center
+    w-fit
+    text-slate-700
+    bg-slate-300 hover:bg-slate-100
+    rounded-md">
             {children}
-
         </div>
     </>
-)
+}
+
+export const SubmitButton = (props: ButtonProps) => {
+    const {pending} = useFormStatus();
+    return <Button {...props} disabled={pending} className="
+                            cursor-pointer
+                            w-44 h-10
+                            rounded-md
+                            dark:bg-transparent
+                            capitalize">
+        {pending ? "Submitting..." : "Subbmit"}
+    </Button>
+}
 
 
 export const SignOutButton = () => {

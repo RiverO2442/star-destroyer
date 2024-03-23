@@ -37,7 +37,6 @@ const ReceiptList = async ({params, searchParams}: {
             flex flex-col items-center 
             justify-start">
 
-
                 <CreateItemForm/>
 
             </div>

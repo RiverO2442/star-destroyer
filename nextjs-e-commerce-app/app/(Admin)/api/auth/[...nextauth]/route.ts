@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google"
 
 
 const handler = NextAuth({
+    secret: process.env.NEXTAUTH_SECRET,
     providers:[
         GitHubProvider({
             clientId: process.env.GITHUB_ID!,
@@ -13,11 +14,9 @@ const handler = NextAuth({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!
         })
-        
-        
     ],
     callbacks:{
-        async redirect({ url,baseUrl }){
+        async redirect(){
            return '/'
         },
         async signIn({account,profile}){

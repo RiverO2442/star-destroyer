@@ -1,5 +1,15 @@
 export interface ReceiptSummary {
-   id: string,
+    id: string,
+    name: string,
+    amount: number,
+    createdDate: Date
+}
+
+export type CreateReceiptRequest = {
+    name: string,
+    amount: number,
+    consumers: string[],
+    description: string,
 }
 
 export interface Receipt {
