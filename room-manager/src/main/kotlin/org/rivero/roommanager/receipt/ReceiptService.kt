@@ -61,6 +61,7 @@ class ReceiptService @Autowired constructor(
                         .amount(request.amount)
                         .consumers(request.consumers)
                         .buyerId(userID)
+                        .createdDate(ZonedDateTime.now())
                         .build()
                 ).id
             }

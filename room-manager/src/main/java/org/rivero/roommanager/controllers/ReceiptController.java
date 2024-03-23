@@ -6,7 +6,7 @@ import org.rivero.roommanager.receipt.ReceiptDto;
 import org.rivero.roommanager.receipt.ReceiptService;
 import org.rivero.roommanager.receipt.ReceiptSummary;
 import org.rivero.roommanager.request.ReceiptUpdateRequest;
-import org.rivero.roommanager.services.UserService;
+import org.rivero.roommanager.user.UserService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

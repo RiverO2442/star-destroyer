@@ -1,39 +1,45 @@
+"use client";
+
 import InfiniteScroll from "react-infinite-scroll-component";
-import utilStyles from "@/styles/utils.module.scss";
 import Link from "next/link";
 import React, {useEffect, useState} from "react";
 import {ReceiptSummary} from "@/types/receipt";
 import {useCrudApi} from "@/app/(admin)/api/curd";
+import {useSession} from "next-auth/react";
+import {PageResponse} from "@/types/pagination";
 
 const ReceiptInfiniteScroll = () => {
     const [receipts, setReceipts] = useState<ReceiptSummary[]>([]);
+    const [page, setPage] = useState<PageResponse<ReceiptSummary>>();
     const {getPage} = useCrudApi<undefined, undefined, ReceiptSummary, undefined>("/api/v1/receipts");
+    const {data: session} = useSession();
 
     useEffect(() => {
         fetchMoreData();
-    }, []);
+    }, [session]);
 
     const fetchMoreData = () => {
         getPage()
             .then(value => {
-                const fetchedItems = value.data;
-                setReceipts(receipts.concat(fetchedItems.content));
+                const page = value.data;
+                setReceipts(receipts.concat(page.content));
+                setPage(page)
             })
             .catch(reason => {
                 console.error(reason);
             })
     }
     return <InfiniteScroll style={{}} next={fetchMoreData}
-                           hasMore={true}
+                           hasMore={!page?.last}
                            loader={<h4>...</h4>}
                            dataLength={receipts.length}>
         {
             receipts.map(({id, name, amount, createdDate}) => (
-                <li className={utilStyles.listItem} key={id + (Math.random() + 1).toString(36).substring(7)}>
+                <li key={id}>
                     <Link href={`/receipts/${id}/edit`}> {name || "untitled receipt"} </Link>
                     <br/>
-                    <small className={utilStyles.lightText}>
-                        {createdDate.toString()}
+                    <small>
+                        {"" + createdDate + ""}
                         {/*<Date dateString={lastModifiedDate}></Date>*/}
                     </small>
                 </li>

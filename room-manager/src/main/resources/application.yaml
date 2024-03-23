@@ -22,9 +22,9 @@ spring:
       client:
         registration:
           google:
-            client-id: 759254302934-h0u67i38q8idqkvvjr5v0dmfmni59a0m.apps.googleusercontent.com
-            client-secret: secret
-            redirect-uri: http://localhost:3000
+            client-id: ${GOOGLE_CLIENT_ID:759254302934-h0u67i38q8idqkvvjr5v0dmfmni59a0m.apps.googleusercontent.com}
+            client-secret: ${GOOGLE_CLIENT_SECRET:}
+            redirect-uri: ${REDIRECT_URI:http://localhost:3000}
             scope:
               - email
               - profile

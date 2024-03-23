@@ -66,7 +66,7 @@ export default async function RootLayout(
           xs:text-base
           mt-2 grid grid-cols-4 justify-items-center'>
                 <ClientItemSearch/>
-                <Link className='hover:underline' href={"/admin/receipts"}>Items</Link>
+                <Link className='hover:underline' href={"/admin/receipts"}>Receipts</Link>
                 <Link className='hover:underline' href={"/admin/categories"}>Categories</Link>
                 <Link className='hover:underline' href={"/admin/orders"}>Orders</Link>
             </div>}

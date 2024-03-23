@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {Category} from "@/types/category";
-import ReceiptInfiniteScroll from "@/app/(admin)/admin/receipts/[page]/[...sortBy]/ReceiptInfiniteScroll";
+import ReceiptInfiniteScroll from "@/app/(admin)/admin/receipts/ReceiptInfiniteScroll";
+import {Button} from "@mui/material";
 
 const CategoryList = async () => {
 
@@ -22,16 +23,14 @@ const CategoryList = async () => {
             overflow-x-hidden
 
             ">
-            <ReceiptInfiniteScroll/>
             <div className="xs:w-3/4 w-full
             min-h-[60vh] 
             flex flex-col items-center 
             justify-start">
 
 
-                <h1
-                    className="text-2xl mb-6">Categories</h1>
-
+                <h1 className="text-2xl mb-6">Receipts</h1>
+                <ReceiptInfiniteScroll/>
                 <ul
                     className="
                         gap-y-2
@@ -84,15 +83,12 @@ const CategoryList = async () => {
                 <div className="flex flex-row-reverse justify-between w-full">
 
                     <div className="flex flex-col gap-y-4 mt-2">
-                        <Link
-                            href="/admin/categories/create/new"
-                            className="
-                                hover:underline
-                                text-green-400
-                                dark:text-green-600
-                                capitalize font-bold">
-                            Create New Category
-                        </Link>
+                        <Button href="/admin/receipts/create/new"
+                                variant="contained"
+                                color="primary"
+                                component={Link}>
+                            Create new
+                        </Button>
                     </div>
 
                 </div>
