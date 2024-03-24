@@ -1,11 +1,12 @@
-import {   fetchItemsADMIN, updateItem } from "@/app/(Admin)/api/items";
 import Link from "next/link";
-import { FailureMessage, SuccessMessage } from "@/app/(Shared)/components/UserAlert";
-import { CreateItemForm } from "./CreateItemForm";
+import {FailureMessage, SuccessMessage} from "@/app/(Shared)/components/UserAlert";
+import {CreateItemForm} from "./CreateItemForm";
 
 
-
-const ItemsList = async({params,searchParams}:{params:{status:string},searchParams:{error:string,message:string}}) => {
+const ItemsList = async ({params, searchParams}: {
+    params: { status: string },
+    searchParams: { error: string, message: string }
+}) => {
 
     const status = params.status;
 
@@ -20,11 +21,11 @@ const ItemsList = async({params,searchParams}:{params:{status:string},searchPara
             <h1 className="text-2xl my-2">Create new item</h1>
 
 
-            {status=="success" && 
-            <SuccessMessage message={searchParams.message}/>}
+            {status == "success" &&
+                <SuccessMessage message={searchParams.message}/>}
 
-            {status=="fail" && 
-            <FailureMessage error={searchParams.error}/>}
+            {status == "fail" &&
+                <FailureMessage error={searchParams.error}/>}
 
 
             <div className="
@@ -35,15 +36,15 @@ const ItemsList = async({params,searchParams}:{params:{status:string},searchPara
             flex flex-col items-center 
             justify-start">
 
-            
+
                 <CreateItemForm/>
-                
+
             </div>
 
             <Link
-                    className="hover:underline"
-                    href="/admin">
-                    Back to Dashboard
+                className="hover:underline"
+                href="/admin">
+                Back to Dashboard
             </Link>
 
         </main>

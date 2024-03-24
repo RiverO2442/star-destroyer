@@ -1,28 +1,25 @@
-import { fetchCategoriesADMIN } from "@/app/(Admin)/api/categories";
-import { CoolButton } from "@/app/(Shared)/components/Global"
-import { getServerSession } from "next-auth/next";
-import { ReactNode } from "react";
-import { ImageInput } from "./imageInputField";
-import { CoolInput } from "@/app/(Shared)/components/CoolInput";
+import {fetchCategoriesADMIN} from "@/app/(Admin)/api/categories";
+import {CoolButton} from "@/app/(Shared)/components/Global"
+import {getServerSession} from "next-auth/next";
+import {ImageInput} from "./imageInputField";
+import {CoolInput} from "@/app/(Shared)/components/CoolInput";
 
-export const CreateItemForm = async() => {
+export const CreateItemForm = async () => {
 
     const categories = await fetchCategoriesADMIN();
-    const session =  await getServerSession();
-
+    const session = await getServerSession();
 
 
     return (
         <form
 
             id="itemForm"
-            action={session?'/admin/items/create/loading':"/admin/unauthorized"}
+            action={session ? '/admin/items/create/loading' : "/admin/unauthorized"}
             className="
                     px-2
                     flex flex-col
                     text-lg 
                     gap-y-2">
-
 
 
             <div className="flex justify-center">
@@ -59,7 +56,7 @@ export const CreateItemForm = async() => {
                 <input
                     type="checkbox"
                     name="active"
-                    className="text-inherit bg-inherit hover:bg-slate-50 dark:hover:bg-slate-950" />
+                    className="text-inherit bg-inherit hover:bg-slate-50 dark:hover:bg-slate-950"/>
             </div>
 
             <div
@@ -96,7 +93,7 @@ export const CreateItemForm = async() => {
                         className="w-[80px]"
                         step={0.01}
                         min={0.5}
-                        name="price" />
+                        name="price"/>
                 </CoolInput>
                 Euro
             </div>
@@ -110,7 +107,7 @@ export const CreateItemForm = async() => {
 
                 <div
                     className=
-                    " hidden peer-checked:flex">
+                        " hidden peer-checked:flex">
 
                     <CoolInput>
                         <input

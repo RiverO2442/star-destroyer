@@ -1,47 +1,69 @@
 package org.rivero.roommanager.user
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.*
 import jakarta.xml.bind.DatatypeConverter
 import lombok.RequiredArgsConstructor
-import lombok.extern.slf4j.Slf4j
+import mu.KLogging
+import org.rivero.roommanager.EMAIL
+import org.rivero.roommanager.NAME
+import org.rivero.roommanager.PICTURE
 import org.rivero.roommanager.configuration.IAuthenticationFacade
 import org.rivero.roommanager.entities.User
-import org.rivero.roommanager.DBConnectionManager
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 import java.math.BigDecimal
+import java.net.URI
 import java.security.Key
 import java.util.*
 import javax.crypto.spec.SecretKeySpec
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 class UserService @Autowired constructor(
     val userRepository: UserRepository,
-    val authenticationFacade: IAuthenticationFacade
+    val authenticationFacade: IAuthenticationFacade,
+    val mapper: ObjectMapper,
+    val properties: OAuth2ResourceServerProperties
 ) {
-
-    val dbConnectionManager: DBConnectionManager? = null
     fun register(): Mono<Any> {
         return authenticationFacade.principal
             .publishOn(Schedulers.boundedElastic())
-            .map {
-                userRepository.save(
-                    User.builder()
-                        .id(it.subject)
-                        .balance(BigDecimal.ZERO)
-                        .build()
-                ).id
+            .handle<Any> { it, sink ->
+                logger.debug { mapper.writeValueAsString(it) }
+                val google = properties.jwt.issuerUri
+                when (it.issuer.toString()) {
+                    google -> {
+                        val userBuilder = User.builder()
+                            .id(it.claims[EMAIL].toString())
+                            .googleId(it.subject)
+                            .name(it.claims[NAME].toString())
+                            .email(it.claims[EMAIL].toString())
+                            .balance(BigDecimal.ZERO)
+                        it.claims[PICTURE]?.let {
+                            try {
+                                userBuilder.picture(URI.create(it.toString()).toURL())
+                            } catch (e: Exception) {
+                                error(e)
+                            }
+                        }
+                        sink.next(userRepository.save(userBuilder.build()).id)
+                    }
+
+                    else -> {
+                        sink.error(NotImplementedError("not implemented issuer"))
+                    }
+                }
             }
     }
 
     fun login(request: LoginRequest): String {
-        return "";
+        throw NotImplementedError()
 //        if (DigestUtils.md5DigestAsHex(request.password.toByteArray(StandardCharsets.UTF_8))
 //            == userRepository!!.getPasswordHash(request.username)
 //        ) {
@@ -65,7 +87,7 @@ class UserService @Autowired constructor(
     }
 
     fun deleteOne(id: String) {
-        userRepository.deleteById(id);
+        userRepository.deleteById(id)
     }
 
     fun update(id: String, request: UpdateUserRequest) {
@@ -86,7 +108,7 @@ class UserService @Autowired constructor(
         )
     }
 
-    companion object {
+    companion object : KLogging() {
         const val TOKEN_ISSUER: String = "room-manager-service"
         const val SECRET_KEY: String =
             "my-secret-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"

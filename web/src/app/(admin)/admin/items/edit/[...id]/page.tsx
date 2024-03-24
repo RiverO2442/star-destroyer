@@ -1,16 +1,15 @@
-import {   fetchItemsADMIN, updateItem } from "@/app/(Admin)/api/items";
+import {fetchItemsADMIN} from "@/app/(Admin)/api/items";
 import Link from "next/link";
-import { fetchCategories } from "@/app/(User)/(lib)/api/categories";
-import { ChangeItemServer } from "./ChangeItemServer";
-import { Cart_Failure, Cart_Success } from "@/app/(User)/(lib)/components/cart/add_Cart";
-import { redirect } from "next/navigation";
-import { FailureMessage, SuccessMessage } from "@/app/(Shared)/components/UserAlert";
-import { fetchCategoriesADMIN } from "@/app/(Admin)/api/categories";
+import {ChangeItemServer} from "./ChangeItemServer";
+import {redirect} from "next/navigation";
+import {FailureMessage, SuccessMessage} from "@/app/(Shared)/components/UserAlert";
+import {fetchCategoriesADMIN} from "@/app/(Admin)/api/categories";
 
 
-
-const ItemsList = async({params,searchParams}:{params:{id:string},searchParams:{error:string,message:string}}) => {
-
+const ItemsList = async ({params, searchParams}: {
+    params: { id: string },
+    searchParams: { error: string, message: string }
+}) => {
 
 
     const id = params.id[0];
@@ -18,13 +17,12 @@ const ItemsList = async({params,searchParams}:{params:{id:string},searchParams:{
 
     let item;
 
-    try{
-        item=[...await fetchItemsADMIN({
-            query:id,
+    try {
+        item = [...await fetchItemsADMIN({
+            query: id,
         })][0];
-    }
-    catch(error){
-        redirect('/admin/items/1/default')        
+    } catch (error) {
+        redirect('/admin/items/1/default')
     }
 
 
@@ -41,12 +39,11 @@ const ItemsList = async({params,searchParams}:{params:{id:string},searchParams:{
             <h1 className="text-2xl my-2">Edit {item.name}</h1>
 
 
+            {status == "success" &&
+                <SuccessMessage message={searchParams.message}/>}
 
-            {status=="success" && 
-            <SuccessMessage message={searchParams.message}/>}
-
-            {status=="fail" && 
-            <FailureMessage error={searchParams.error}/>}
+            {status == "fail" &&
+                <FailureMessage error={searchParams.error}/>}
 
 
             <div className="
@@ -57,15 +54,15 @@ const ItemsList = async({params,searchParams}:{params:{id:string},searchParams:{
             flex flex-col items-center 
             justify-start">
 
-            
+
                 <ChangeItemServer item={item} categories={categories}/>
-                
+
             </div>
 
             <Link
-                    className="hover:underline"
-                    href="/admin">
-                    Back to Dashboard
+                className="hover:underline"
+                href="/admin">
+                Back to Dashboard
             </Link>
 
         </main>

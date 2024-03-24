@@ -3,7 +3,6 @@ import Image from "next/image"
 import SortBy from "./SortBy";
 import {redirect} from "next/navigation"
 import {fetchItemsADMIN} from "@/app/(admin)/api/items";
-import ReceiptInfiniteScroll from "@/app/(admin)/admin/receipts/[page]/[...sortBy]/ReceiptInfiniteScroll";
 
 const ReceiptsPage = async ({params}: { params: { page: string, sortBy: string[] } }) => {
 

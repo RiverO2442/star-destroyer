@@ -1,4 +1,4 @@
-package org.rivero.roommanager.user;
+package org.rivero.roommanager.user
 
 @JvmRecord
 data class UpdateUserRequest(
@@ -16,4 +16,11 @@ data class UserDto(
 data class MetadataItem(
     val id: String,
     val name: String,
+)
+
+@JvmRecord
+data class AuthUser(
+    val id: String,
+    val name: String,
+    val email: String,
 )

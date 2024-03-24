@@ -1,4 +1,4 @@
-import { Price } from "./price";
+import {Price} from "./price";
 
 export type DiscountType = "percentage" | "fixed";
 

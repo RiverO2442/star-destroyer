@@ -1,7 +1,7 @@
-package org.rivero.roommanager.user;
+package org.rivero.roommanager.user
 
-public record UserUpdateRequest(
-        String passwordHash,
-        String id
-) {
-}
+@JvmRecord
+data class UserUpdateRequest(
+    val passwordHash: String,
+    val id: String
+)

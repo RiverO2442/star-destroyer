@@ -16,11 +16,13 @@ export const CreateItemForm = () => {
     const {data: session} = useSession();
 
     async function handleSubmit(formData: FormData) {
-        console.log(formData)
+        let checkedMembers: string[] = members
+            .filter(member => formData.get(`consumer.${member.id}`))
+            .map(member => member.id)
         await create({
             name: formData.get("name") as string,
             amount: parseFloat(formData.get("amount") as string),
-            consumers: [],
+            consumers: checkedMembers,
             description: formData.get("description") as string,
         })
         await new Promise(r => setTimeout(r, 1000));
@@ -114,9 +116,9 @@ export const CreateItemForm = () => {
                     {members.map(
                         member => (
                             <li key={member.id}>
-                                <input
-                                    name={`category.${member.id}`}
-                                    type="checkbox"/>{member.name}
+                                <input name={`consumer.${member.id}`} type="checkbox"
+                                       defaultChecked={member.id === session?.user?.email}/>
+                                {member.name}
                             </li>
                         )
                     )}

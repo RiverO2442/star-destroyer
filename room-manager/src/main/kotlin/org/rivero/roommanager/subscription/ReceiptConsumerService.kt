@@ -1,33 +1,31 @@
-package org.rivero.roommanager.subscription;
+package org.rivero.roommanager.subscription
 
-import lombok.RequiredArgsConstructor;
-import org.rivero.roommanager.entities.ReceiptConsumer;
-import org.rivero.roommanager.DBConnectionManager;
-import org.rivero.roommanager.receipt.ReceiptConsumerRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import lombok.RequiredArgsConstructor
+import org.rivero.roommanager.DBConnectionManager
+import org.rivero.roommanager.entities.ReceiptConsumer
+import org.rivero.roommanager.receipt.ReceiptConsumerRepository
+import org.springframework.stereotype.Service
 
 @Service
 @RequiredArgsConstructor
-public class ReceiptConsumerService {
-    private final ReceiptConsumerRepository receiptConsumerRepository;
-    final DBConnectionManager dbConnectionManager;
+class ReceiptConsumerService {
+    private val receiptConsumerRepository: ReceiptConsumerRepository? = null
+    val dbConnectionManager: DBConnectionManager? = null
 
-    public void create(ReceiptConsumer request) {
-        receiptConsumerRepository.insert(request);
+    fun create(request: ReceiptConsumer?) {
+        receiptConsumerRepository!!.insert(request!!)
     }
 
-    public List<ReceiptConsumer> getByUserId(String id) {
-        return receiptConsumerRepository.getListByUserId(id);
+    fun getByUserId(id: String?): List<ReceiptConsumer> {
+        return receiptConsumerRepository!!.getListByUserId(id)
     }
 
-    public List<ReceiptConsumer> getByReceiptId(String id) {
-        return receiptConsumerRepository.getListByReceiptId(id);
+    fun getByReceiptId(id: String?): List<ReceiptConsumer> {
+        return receiptConsumerRepository!!.getListByReceiptId(id)
     }
 
-    public String deleteOne(String id) {
-        receiptConsumerRepository.deleteOne(id);
-        return "Record deleted";
+    fun deleteOne(id: String?): String {
+        receiptConsumerRepository!!.deleteOne(id)
+        return "Record deleted"
     }
 }

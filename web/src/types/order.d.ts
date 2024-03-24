@@ -1,13 +1,13 @@
-import { Address } from "./address";
-import { FulfillmentStatus, PaymentStatus } from "./checkout-capture-response";
-import { Currency } from "./currency";
-import { Customer } from "./customer";
-import { Discount } from "./discount";
-import { OrderCollected } from "./order-collected";
-import { OrderConditionals } from "./order-conditionals";
-import { OrderLineItem } from "./order-line-item";
-import { OrderTax } from "./order-tax";
-import { Price } from "./price";
+import {Address} from "./address";
+import {FulfillmentStatus, PaymentStatus} from "./checkout-capture-response";
+import {Currency} from "./currency";
+import {Customer} from "./customer";
+import {Discount} from "./discount";
+import {OrderCollected} from "./order-collected";
+import {OrderConditionals} from "./order-conditionals";
+import {OrderLineItem} from "./order-line-item";
+import {OrderTax} from "./order-tax";
+import {Price} from "./price";
 
 export interface Order {
     version: string;

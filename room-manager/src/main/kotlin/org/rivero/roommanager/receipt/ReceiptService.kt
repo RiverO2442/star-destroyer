@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import lombok.RequiredArgsConstructor
 import lombok.extern.slf4j.Slf4j
 import org.rivero.roommanager.configuration.IAuthenticationFacade
-import org.rivero.roommanager.user.UserInfo
 import org.rivero.roommanager.entities.Receipt
 import org.rivero.roommanager.entities.ReceiptConsumer
 import org.rivero.roommanager.entities.Report
+import org.rivero.roommanager.user.UserInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -46,17 +46,16 @@ class ReceiptService @Autowired constructor(
     }
 
     fun create(request: CreateReceiptRequest?): Mono<String> {
-        return authenticationFacade.principal
+        return authenticationFacade.user
             .publishOn(Schedulers.boundedElastic())
             .map {
-                val userID = it.subject
                 return@map receiptRepository.save(
                     Receipt.builder()
                         .name(request!!.name)
                         .description(request.description)
                         .amount(request.amount)
                         .consumers(request.consumers)
-                        .buyerId(userID)
+                        .buyerId(it.id)
                         .createdDate(ZonedDateTime.now())
                         .build()
                 ).id
@@ -65,29 +64,29 @@ class ReceiptService @Autowired constructor(
     }
 
     fun deleteOne(id: String?) {
-        val rs: List<ReceiptConsumer> = moneyConsumeEventRepository!!.getListReceiptConsumerByReceiptId(id)
+        val rs: List<ReceiptConsumer> = moneyConsumeEventRepository.getListReceiptConsumerByReceiptId(id)
         rs.forEach(Consumer { rc: ReceiptConsumer -> moneyConsumeEventRepository.deleteOneReceiptConsumer(rc.id) })
         moneyConsumeEventRepository.deleteOne(id)
     }
 
-    fun updateOne(receipt: ReceiptUpdateRequest?) {
+    fun updateOne(receipt: ReceiptUpdateRequest) {
         moneyConsumeEventRepository.updateOne(receipt)
     }
 
-    fun createReceiptConsumer(request: ReceiptConsumer?) {
-        moneyConsumeEventRepository!!.insertReceiptConsumer(request)
+    fun createReceiptConsumer(request: ReceiptConsumer) {
+        moneyConsumeEventRepository.insertReceiptConsumer(request)
     }
 
     fun getByUserId(id: String?): List<ReceiptConsumer> {
-        return moneyConsumeEventRepository!!.getListReceiptConsumerByUserId(id)
+        return moneyConsumeEventRepository.getListReceiptConsumerByUserId(id)
     }
 
     fun getByReceiptId(id: String?): List<ReceiptConsumer> {
-        return moneyConsumeEventRepository!!.getListReceiptConsumerByReceiptId(id)
+        return moneyConsumeEventRepository.getListReceiptConsumerByReceiptId(id)
     }
 
     fun deleteOneRC(id: String?): String {
-        moneyConsumeEventRepository!!.deleteOneReceiptConsumer(id)
+        moneyConsumeEventRepository.deleteOneReceiptConsumer(id)
         return "Record deleted"
     }
 

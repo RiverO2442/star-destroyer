@@ -1,7 +1,7 @@
-import { Currency } from "./currency";
-import { OrderCollected } from "./order-collected";
-import { OrderConditionals } from "./order-conditionals";
-import { Price } from "./price";
+import {Currency} from "./currency";
+import {OrderCollected} from "./order-collected";
+import {OrderConditionals} from "./order-conditionals";
+import {Price} from "./price";
 
 export type PaymentStatus = "paid" | "not_paid" | "partially_paid" | "refunded" | "authorized";
 

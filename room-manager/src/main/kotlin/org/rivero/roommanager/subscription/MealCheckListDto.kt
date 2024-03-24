@@ -1,12 +1,12 @@
-package org.rivero.roommanager.subscription;
+package org.rivero.roommanager.subscription
 
-import java.time.ZonedDateTime;
+import java.time.ZonedDateTime
 
-public record MealCheckListDto(
-        String id,
-        String month,
-        String checkList,
-        String consumerId,
-        ZonedDateTime time
-) {
-}
+@JvmRecord
+data class MealCheckListDto(
+    val id: String,
+    val month: String,
+    val checkList: String,
+    val consumerId: String,
+    val time: ZonedDateTime
+)

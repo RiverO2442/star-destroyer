@@ -1,6 +1,6 @@
-import { ReactNode } from "react"
+import {ReactNode} from "react"
 
-export const FailureMessage = ({error}:{error:string}) => {
+export const FailureMessage = ({error}: { error: string }) => {
 
     return (
         <CasualSpan>
@@ -18,12 +18,12 @@ export const FailureMessage = ({error}:{error:string}) => {
                 Failed: {error}
             </div>
         </CasualSpan>
-        
+
     )
 }
 
 
-export const SuccessMessage = ({message}:{message:string}) => {
+export const SuccessMessage = ({message}: { message: string }) => {
 
     return (
         <CasualSpan>
@@ -43,10 +43,10 @@ export const SuccessMessage = ({message}:{message:string}) => {
     )
 }
 
-const CasualSpan = ({children}:{children:ReactNode}) => (
+const CasualSpan = ({children}: { children: ReactNode }) => (
 
 // On mobile fixed will not work as expected (the component might be behind browser navbar..)
-        <div className="
+    <div className="
             z-30
             rounded-md
             bottom-0 left-0 
@@ -55,8 +55,8 @@ const CasualSpan = ({children}:{children:ReactNode}) => (
             backdrop-blur-md
             text-center
             disappear 
-            "> 
-            {children}
-        </div>
+            ">
+        {children}
+    </div>
 
 )

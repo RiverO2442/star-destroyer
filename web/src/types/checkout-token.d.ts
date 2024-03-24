@@ -1,10 +1,10 @@
-import { Extrafields } from "./extrafields";
-import { Gateway } from "./gateway";
-import { Live } from "./live";
-import { Merchant } from "./merchant";
-import { Price } from "./price";
-import { SelectedVariant } from "./selected-variant";
-import { ShippingMethod } from "./shipping-method";
+import {Extrafields} from "./extrafields";
+import {Gateway} from "./gateway";
+import {Live} from "./live";
+import {Merchant} from "./merchant";
+import {Price} from "./price";
+import {SelectedVariant} from "./selected-variant";
+import {ShippingMethod} from "./shipping-method";
 
 export interface CheckoutToken {
     id: string;

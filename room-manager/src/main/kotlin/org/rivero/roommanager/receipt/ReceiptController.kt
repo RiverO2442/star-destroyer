@@ -1,31 +1,31 @@
-package org.rivero.roommanager.receipt;
+package org.rivero.roommanager.receipt
 
-import lombok.RequiredArgsConstructor;
-import org.rivero.roommanager.user.UserService;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
-
-import java.time.ZonedDateTime;
-
-import static org.springframework.http.HttpStatus.CREATED;
+import lombok.RequiredArgsConstructor
+import org.rivero.roommanager.user.UserService
+import org.springdoc.core.annotations.ParameterObject
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Mono
+import java.time.ZonedDateTime
 
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class ReceiptController {
-    private final ReceiptService receiptService;
-    private final UserService userService;
+class ReceiptController @Autowired constructor(
+    val receiptService: ReceiptService,
+    val userService: UserService
+) {
 
     @GetMapping("/receipts")
-    public Mono<Page<ReceiptSummary>> getReceipt(
-            @RequestParam(required = false) ZonedDateTime fromDate,
-            @RequestParam(required = false) ZonedDateTime toDate,
-            @ParameterObject Pageable pageable
-    ) {
+    fun getReceipt(
+        @RequestParam(required = false) fromDate: ZonedDateTime?,
+        @RequestParam(required = false) toDate: ZonedDateTime?,
+        @ParameterObject pageable: Pageable?
+    ): Mono<Page<ReceiptSummary>> {
 //        UserInfo userInfo = userService.authorize(token);
 //        return new PageImpl<>(receiptService.getAllReceipt(fromDate, toDate, null).stream()
 //                .map(moneyConsumeEvent -> new ReceiptDto(
@@ -38,26 +38,26 @@ public class ReceiptController {
 //                        moneyConsumeEvent.getCreatedDate()
 //
 //                )).toList());
-        return receiptService.getAllReceipt(fromDate, toDate, null, pageable);
+        return receiptService.getAllReceipt(fromDate, toDate, null, pageable!!)
     }
 
     @PutMapping("/receipts")
-    public ResponseEntity<String> updateReceipt(@RequestBody ReceiptUpdateRequest request) {
-        receiptService.updateOne(request);
-        return ResponseEntity.ok().build();
+    fun updateReceipt(@RequestBody request: ReceiptUpdateRequest?): ResponseEntity<String> {
+        receiptService.updateOne(request!!)
+        return ResponseEntity.ok().build()
     }
 
     @PostMapping("/receipts")
-    @ResponseStatus(CREATED)
-    public Mono<String> addReceipt(
-            @RequestBody CreateReceiptRequest request
-    ) {
+    @ResponseStatus(HttpStatus.CREATED)
+    fun addReceipt(
+        @RequestBody request: CreateReceiptRequest?
+    ): Mono<String> {
 //        UserInfo userInfo = userService.authorize(token);
-        return receiptService.create(request);
+        return receiptService.create(request)
     }
 
     @GetMapping("/receipts/{receiptId}")
-    public Mono<ReceiptDto> getReceiptById(@PathVariable(name = "receiptId") String receiptId) {
+    fun getReceiptById(@PathVariable(name = "receiptId") receiptId: String?): Mono<ReceiptDto> {
 //        ReceiptDto receipt = receiptService.getReceiptById(receiptId);
 //        if (receiptService.getReceiptById(receiptId) != null)
 //            return ResponseEntity.ok().body(new ReceiptDto(
@@ -69,12 +69,12 @@ public class ReceiptController {
 //                    receipt.description(),
 //                    receipt.createDate()
 //            ));
-        return Mono.empty();
+        return Mono.empty()
     }
 
     @DeleteMapping("/receipts/{receiptId}")
-    public ResponseEntity<Void> deleteReceiptById(@PathVariable(name = "receiptId") String receiptId) {
-        receiptService.deleteOne(receiptId);
-        return ResponseEntity.noContent().build();
+    fun deleteReceiptById(@PathVariable(name = "receiptId") receiptId: String?): ResponseEntity<Void> {
+        receiptService.deleteOne(receiptId)
+        return ResponseEntity.noContent().build()
     }
 }

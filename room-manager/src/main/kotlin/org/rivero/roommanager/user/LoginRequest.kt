@@ -1,7 +1,7 @@
-package org.rivero.roommanager.user;
+package org.rivero.roommanager.user
 
-public record LoginRequest(
-        String username,
-        String password
-) {
-}
+@JvmRecord
+data class LoginRequest(
+    val username: String,
+    val password: String
+)

@@ -1,5 +1,5 @@
-import { Address } from "./address";
-import { Extrafields } from "./extrafields";
+import {Address} from "./address";
+import {Extrafields} from "./extrafields";
 
 export interface CheckoutCapture {
     line_items?: any;

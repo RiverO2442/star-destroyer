@@ -1,10 +1,10 @@
 import Commerce = require("../");
-import { CheckoutCapture } from "../types/checkout-capture";
-import { CheckoutCaptureResponse } from "../types/checkout-capture-response";
-import { CheckoutToken } from "../types/checkout-token";
-import { DiscountType } from "../types/discount";
-import { Live } from "../types/live";
-import { Price } from "../types/price";
+import {CheckoutCapture} from "../types/checkout-capture";
+import {CheckoutCaptureResponse} from "../types/checkout-capture-response";
+import {CheckoutToken} from "../types/checkout-token";
+import {DiscountType} from "../types/discount";
+import {Live} from "../types/live";
+import {Price} from "../types/price";
 
 export type IdentifierType = "product_id" | "cart" | "permalink";
 
@@ -101,25 +101,37 @@ export class Checkout {
 
     /** @deprecated */
     protect(token: string): Promise<any>;
+
     generateToken(identifier: string, data: object): Promise<CheckoutToken>;
+
     generateTokenFrom(type: IdentifierType, identifier: string): Promise<CheckoutToken>;
+
     capture(token: string, data: CheckoutCapture): Promise<CheckoutCaptureResponse>;
+
     receipt(token: string): Promise<any>;
 
     checkPayWhatYouWant(token: string, data: { customer_set_price: string }): Promise<CheckPayWhatYouWantResponse>;
+
     fields(identifier: string): Promise<any>;
+
     getLocationFromIP(token: string, ipAddress?: string): Promise<GetLocationFromIPResponse>;
+
     isFree(token: string): Promise<IsFreeResponse>;
+
     checkVariant(token: string, lineItemId: string, data: object): Promise<CheckVariantResponse>;
+
     checkDiscount(token: string, data: { code: string }): Promise<CheckDiscountResponse>;
+
     checkShippingOption(
         token: string,
         data: { shipping_option_id: string; country: string; region?: string | undefined },
     ): Promise<CheckShippingOptionResponse>;
+
     getShippingOptions(
         token: string,
         data: { country: string; region?: string | undefined },
     ): Promise<GetShippingOptionsResponse[]>;
+
     setTaxZone(
         token: string,
         data: {
@@ -129,9 +141,14 @@ export class Checkout {
             postal_zip_code?: string | undefined;
         },
     ): Promise<SetTaxZoneResponse>;
+
     checkQuantity(token: string, lineItemId: string, data: object): Promise<CheckQuantityResponse>;
+
     helperValidation(token: string): Promise<HelperValidationResponse>;
+
     getLive(token: string): Promise<Live>;
+
     getToken(token: string): Promise<CheckoutToken>;
+
     checkGiftcard(token: string, params: { code: string }): Promise<CheckGiftcardResponse>;
 }

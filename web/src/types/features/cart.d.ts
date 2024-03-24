@@ -1,8 +1,8 @@
 import Commerce = require("../");
-import { Asset } from "../types/asset";
-import { Cart as CartType } from "../types/cart";
-import { LineItem } from "../types/line-item";
-import { Price } from "../types/price";
+import {Asset} from "../types/asset";
+import {Cart as CartType} from "../types/cart";
+import {LineItem} from "../types/line-item";
+import {Price} from "../types/price";
 
 export type RequestMethod = "get" | "post" | "put" | "patch" | "delete";
 
@@ -41,14 +41,24 @@ export class Cart {
     constructor(commerce: Commerce);
 
     refresh(): Promise<CartType>;
+
     id(): string | null;
+
     request(endpoint?: string, method?: RequestMethod, data?: object, returnFullRequest?: boolean): Promise<any>;
+
     add(productId: string, quantity?: number, variantData?: object | string): Promise<AddUpdateResponse>;
+
     retrieve(cardId?: string): Promise<CartType>;
+
     checkQuantity(productId: string, quantity: number): Promise<boolean>;
+
     remove(lineId: string): Promise<RemoveResponse>;
+
     delete(): Promise<DeleteResponse>;
+
     update(lineId: string, data: object): Promise<AddUpdateResponse>;
+
     contents(): Promise<LineItem[]>;
+
     empty(): Promise<EmptyResponse>;
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.net.URL;
 
 @Getter
 @Setter
@@ -19,6 +20,9 @@ public class User {
     @Id
     String id;
     String name;
+    URL picture;
+    String email;
+    String googleId;
     BigDecimal balance;
     int debt;
     int role;

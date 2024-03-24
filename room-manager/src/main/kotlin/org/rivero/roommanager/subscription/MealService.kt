@@ -1,30 +1,43 @@
-package org.rivero.roommanager.subscription;
+package org.rivero.roommanager.subscription
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.UUID;
+import lombok.RequiredArgsConstructor
+import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 @RequiredArgsConstructor
-public class MealService {
-    private final MealCheckListRepository mealCheckListRepository;
+class MealService {
+    private val mealCheckListRepository: MealCheckListRepository? = null
 
-    public void insert(MealCreateRequest mealCheckList) {
-        mealCheckListRepository.insert(new MealCheckListDto(UUID.randomUUID().toString(), mealCheckList.month(), mealCheckList.checklist(), mealCheckList.consumerid(), mealCheckList.time()));
+    fun insert(mealCheckList: MealCreateRequest) {
+        mealCheckListRepository!!.insert(
+            MealCheckListDto(
+                UUID.randomUUID().toString(),
+                mealCheckList.month,
+                mealCheckList.checklist,
+                mealCheckList.consumerId,
+                mealCheckList.time
+            )
+        )
     }
 
-    public Collection<MealCheckListDto> getList() {
-        return mealCheckListRepository.getList();
+    val list: Collection<MealCheckListDto>
+        get() = mealCheckListRepository!!.list
+
+    fun updateOne(mealCheckList: MealCreateRequest, id: String) {
+        mealCheckListRepository!!.updateOne(
+            MealCheckListDto(
+                id,
+                mealCheckList.month,
+                mealCheckList.checklist,
+                mealCheckList.consumerId,
+                mealCheckList.time
+            )
+        )
     }
 
-    public void updateOne(MealCreateRequest mealCheckList, String id) {
-        mealCheckListRepository.updateOne(new MealCheckListDto(id, mealCheckList.month(), mealCheckList.checklist(), mealCheckList.consumerid(), mealCheckList.time()));
-    }
-
-    public MealCheckListDto getOne(String id) {
-        return mealCheckListRepository.getOne(id);
+    fun getOne(id: String): MealCheckListDto? {
+        return mealCheckListRepository!!.getOne(id)
     }
 }
 

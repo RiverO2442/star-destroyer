@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
+import {ReactNode} from "react";
 
-export const CoolInput = ({ children }: { children: ReactNode }) => (
+export const CoolInput = ({children}: { children: ReactNode }) => (
     <div
         className="
     max-w-[100%]

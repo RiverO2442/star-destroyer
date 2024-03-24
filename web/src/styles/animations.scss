@@ -1,144 +1,143 @@
-
-@for $i from 1 through 3{
-    .animation-loader :nth-child(#{$i}){
-        animation: movingDots #{$i + 2}s infinite;
-        animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
-        animation-direction: reverse;
-        animation-delay: #{$i - 1}s;
-    }
+@for $i from 1 through 3 {
+  .animation-loader :nth-child(#{$i}) {
+    animation: movingDots #{$i + 2}s infinite;
+    animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+    animation-direction: reverse;
+    animation-delay: #{$i - 1}s;
+  }
 }
 
-@keyframes movingDots{
-    0%{
-        transform: translateY(0px);
-    }
-    25%{
-        transform: translateY(20px);
-    }
-    50%{
-        transform: translateY(0px);
-    }
-    75%{
-        transform: translateY(-20px);
-    }
-    100%{
-        transform: translateY(0px);
-    }
+@keyframes movingDots {
+  0% {
+    transform: translateY(0px);
+  }
+  25% {
+    transform: translateY(20px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  75% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
-.disappear{
-    animation: disappear-animation;
-    animation-duration: 5s;
-    animation-iteration-count: 1;
-    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
-    opacity: 0%;
-    pointer-events: none;
+.disappear {
+  animation: disappear-animation;
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  opacity: 0%;
+  pointer-events: none;
 
 }
 
 @keyframes disappear-animation {
-    0%{
-        display: block;
-        opacity: 0%;
-        pointer-events: all;
+  0% {
+    display: block;
+    opacity: 0%;
+    pointer-events: all;
 
-    }
-    50%{
-        display: block;
-        opacity: 100%;
-    }
-    99%{
-        opacity: 0%;
-    }
-    100%{
-        display: none;
-    }
+  }
+  50% {
+    display: block;
+    opacity: 100%;
+  }
+  99% {
+    opacity: 0%;
+  }
+  100% {
+    display: none;
+  }
 }
 
-.leftPosAnimation{
-    transform: translateX(0px);
-    animation: left;
-    animation-duration: 0.1s;
-    animation-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715);
-    animation-iteration-count: 1;
+.leftPosAnimation {
+  transform: translateX(0px);
+  animation: left;
+  animation-duration: 0.1s;
+  animation-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715);
+  animation-iteration-count: 1;
 }
 
-.rightPosAnimation{
-    transform: translateX(20px);
-    animation: right;
-    animation-duration: 0.1s;
-    animation-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715);
-    animation-iteration-count: 1;
+.rightPosAnimation {
+  transform: translateX(20px);
+  animation: right;
+  animation-duration: 0.1s;
+  animation-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715);
+  animation-iteration-count: 1;
 }
 
 @keyframes right {
-    0%{
-        transform: translateX(0px)
-    }
-    100%{
-        transform: translateX(20px)
-    }
- 
+  0% {
+    transform: translateX(0px)
+  }
+  100% {
+    transform: translateX(20px)
+  }
+
 }
 
 @keyframes left {
-    0%{
-        transform: translateX(20px)
-    }
-    100%{
-        transform: translateX(0px)
-    }
- 
+  0% {
+    transform: translateX(20px)
+  }
+  100% {
+    transform: translateX(0px)
+  }
+
 }
 
-.animation-appear[data-cartenabled=true]{
-    animation: appear 2s;
-    transform: translateY(0vh);
+.animation-appear[data-cartenabled=true] {
+  animation: appear 2s;
+  transform: translateY(0vh);
 
 }
 
 @keyframes appear {
-    0%{
-        transform: translateY(85vh);
-    }
-    100%{
-        transform: translateY(0vh);
-    }
+  0% {
+    transform: translateY(85vh);
+  }
+  100% {
+    transform: translateY(0vh);
+  }
 }
 
-.animation-disappear[data-cartenabled=false][data-hidden=false]{
-    transform: translateY(85vh);
-    animation: disappear 2s;
+.animation-disappear[data-cartenabled=false][data-hidden=false] {
+  transform: translateY(85vh);
+  animation: disappear 2s;
 }
 
 @keyframes disappear {
-    0%{
-        display: flex;
-        transform: translateY(0vh);
-    }
+  0% {
+    display: flex;
+    transform: translateY(0vh);
+  }
 
-    99%{
+  99% {
 
-        display: flex;
-        transform: translateY(85vh);
-    }
-    100%{
-        display: none;
-    }
+    display: flex;
+    transform: translateY(85vh);
+  }
+  100% {
+    display: none;
+  }
 }
 
-.animation-textScroll{
-    animation: textScroll;
-    animation-duration: 4s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
+.animation-textScroll {
+  animation: textScroll;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
 
 @keyframes textScroll {
-    0%{
-        transform: translateX(0);
-    }
-    100%{
-        transform: translateX(-252px);
-    }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-252px);
+  }
 }

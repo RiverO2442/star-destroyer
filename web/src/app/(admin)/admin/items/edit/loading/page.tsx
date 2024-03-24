@@ -1,11 +1,11 @@
-import { ItemUpdateData, updateItem } from "@/app/(Admin)/api/items";
+import {updateItem} from "@/app/(Admin)/api/items";
 import LoadingScreen from "@/app/(User)/loader/page";
-import { redirect } from "next/navigation";
-import { formDataProccessor } from "../../create/loading/page";
-import { setAsset } from "@/app/(Admin)/api/assets";
-import { getServerSession } from "next-auth";
+import {redirect} from "next/navigation";
+import {formDataProccessor} from "../../create/loading/page";
+import {setAsset} from "@/app/(Admin)/api/assets";
+import {getServerSession} from "next-auth";
 
-const FormLoader = async({searchParams}:{searchParams:FormData}) => {
+const FormLoader = async ({searchParams}: { searchParams: FormData }) => {
 
     await handleSubmit(searchParams);
 
@@ -18,30 +18,28 @@ const FormLoader = async({searchParams}:{searchParams:FormData}) => {
 
 }
 
-const handleSubmit = async(formData:FormData)=>{
+const handleSubmit = async (formData: FormData) => {
     "use server"
 
-    const session =  await getServerSession();
-    const email = session?.user?.email||"";
-    
+    const session = await getServerSession();
+    const email = session?.user?.email || "";
+
     const data = formDataProccessor(formData);
 
     let success = false;
 
-    try{
-        await updateItem(data.product_id,data.properties,email);
-        success=true;
-        if (data.assetID){
-            await setAsset(data.product_id,data.assetID,email);
+    try {
+        await updateItem(data.product_id, data.properties, email);
+        success = true;
+        if (data.assetID) {
+            await setAsset(data.product_id, data.assetID, email);
         }
-      
-    }
-    catch(error){
+
+    } catch (error) {
         redirect(`/admin/items/edit/${data.product_id}/fail?error=${error}`)
-    }
-    finally{
-        const message=`Successfully updated ${data.properties.product.name}.`;
-        if (success){
+    } finally {
+        const message = `Successfully updated ${data.properties.product.name}.`;
+        if (success) {
             redirect(`/admin/items/edit/${data.product_id}/success?message=${message}`)
         }
     }

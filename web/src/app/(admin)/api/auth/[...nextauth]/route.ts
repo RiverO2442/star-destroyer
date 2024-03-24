@@ -36,7 +36,7 @@ export const authOptions: AuthOptions = {
         async signIn({user, account, profile, email, credentials}) {
             console.log("Sign in: ", user, account, profile, email, credentials)
             try {
-                await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/api/v1/users/${user.id}`)
+                await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/api/v1/users/${email}`)
             } catch (error: any) {
                 error = error as AxiosError
                 if (error.response && error.response.status === HttpStatusCode.NotFound) {

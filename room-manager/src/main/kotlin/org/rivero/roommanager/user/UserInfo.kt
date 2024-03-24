@@ -1,7 +1,7 @@
-package org.rivero.roommanager.user;
+package org.rivero.roommanager.user
 
-public record UserInfo(
-        String id,
-        String username
-) {
-}
+@JvmRecord
+data class UserInfo(
+    val id: String,
+    val username: String
+)

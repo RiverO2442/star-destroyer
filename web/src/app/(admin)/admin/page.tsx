@@ -1,5 +1,3 @@
-import {redirect} from "next/navigation"
-
 const AdminPage = async () => {
 
     // redirect('/admin/items/1/default')

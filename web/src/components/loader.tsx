@@ -1,8 +1,8 @@
 import "@/styles/animations.scss"
 
-export default function LoadingScreen(){
+export default function LoadingScreen() {
 
-    const Dot = ()=>(
+    const Dot = () => (
         <div className="
             h-2 w-2
             bg-white
@@ -10,7 +10,7 @@ export default function LoadingScreen(){
             drop-shadow-[0px_0px_4px_rgba(100,100,200,1)]"/>
     )
 
-    return(
+    return (
         <div className="
           flex flex-wrap
           justify-center items-center

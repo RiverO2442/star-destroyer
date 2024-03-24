@@ -26,14 +26,14 @@ class UserController @Autowired constructor(
 
     @GetMapping("/users")
     fun getUsers(): Flux<User> {
-        return Flux.fromStream(userRepository.findAll().stream());
+        return Flux.fromStream(userRepository.findAll().stream())
     }
 
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     fun register(): Mono<Any> {
-        return userService.register();
+        return userService.register()
     }
 
     @GetMapping("/users/{id}")

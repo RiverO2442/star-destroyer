@@ -35,28 +35,28 @@ export const fetchItemsADMIN = async (params: { [key: string]: string }): Promis
 }
 
 export type ItemUpdateData = {
-    product_id:string
-    assetID:string|undefined;
-    properties:{
-        product:{
-            name:string;
-            permalink:string;
-            active:boolean|null;
-            sku:string|null;
-            description:string;
-            price:number;
-            inventory:{
-                managed:boolean|null;
-                available:number;
+    product_id: string
+    assetID: string | undefined;
+    properties: {
+        product: {
+            name: string;
+            permalink: string;
+            active: boolean | null;
+            sku: string | null;
+            description: string;
+            price: number;
+            inventory: {
+                managed: boolean | null;
+                available: number;
             }
         }
-        categories:{
-            [key:number]:{id:string}
+        categories: {
+            [key: number]: { id: string }
         }
     }
 }
 
-export const updateItem = async (product_id:string,newProduct:ItemUpdateData["properties"],adminEmail:string) => {
+export const updateItem = async (product_id: string, newProduct: ItemUpdateData["properties"], adminEmail: string) => {
 
     // if (! AdminList.includes(adminEmail)){
     //     throw 'Unauthorized Email';
@@ -67,7 +67,6 @@ export const updateItem = async (product_id:string,newProduct:ItemUpdateData["pr
     )
 
 
-
     const headers = {
         "X-Authorization": `${process.env.PRIVATE_API_KEY}`,
         "Accept": "application/json",
@@ -75,7 +74,6 @@ export const updateItem = async (product_id:string,newProduct:ItemUpdateData["pr
         "Access-Control-Allow-Origin": "*" //stop fetch errors
 
     };
-
 
 
     const body = newProduct;
@@ -92,13 +90,13 @@ export const updateItem = async (product_id:string,newProduct:ItemUpdateData["pr
 
 
     if (!res.ok) {
-        throw (JSON.stringify(resJSON.error.message)+JSON.stringify(resJSON.error.errors))
+        throw (JSON.stringify(resJSON.error.message) + JSON.stringify(resJSON.error.errors))
     }
 
     return resJSON;
 }
 
-export const createItem = async (newProduct:ItemUpdateData["properties"],adminEmail:string) => {
+export const createItem = async (newProduct: ItemUpdateData["properties"], adminEmail: string) => {
 
     // if (! AdminList.includes(adminEmail)){
     //     throw 'Unauthorized Email';
@@ -109,7 +107,6 @@ export const createItem = async (newProduct:ItemUpdateData["properties"],adminEm
     )
 
 
-
     const headers = {
         "X-Authorization": `${process.env.PRIVATE_API_KEY}`,
         "Accept": "application/json",
@@ -117,7 +114,6 @@ export const createItem = async (newProduct:ItemUpdateData["properties"],adminEm
         "Access-Control-Allow-Origin": "*" //stop fetch errors
 
     };
-
 
 
     const body = newProduct;
@@ -134,13 +130,13 @@ export const createItem = async (newProduct:ItemUpdateData["properties"],adminEm
 
 
     if (!res.ok) {
-        throw (JSON.stringify(resJSON.error.message)+JSON.stringify(resJSON.error.errors))
+        throw (JSON.stringify(resJSON.error.message) + JSON.stringify(resJSON.error.errors))
     }
 
     return resJSON;
 }
 
-export const deleteItem = async (product_id:string,adminEmail:string) => {
+export const deleteItem = async (product_id: string, adminEmail: string) => {
 
     // if (! AdminList.includes(adminEmail)){
     //     throw 'Unauthorized Email';
@@ -151,7 +147,6 @@ export const deleteItem = async (product_id:string,adminEmail:string) => {
     )
 
 
-
     const headers = {
         "X-Authorization": `${process.env.PRIVATE_API_KEY}`,
         "Accept": "application/json",
@@ -159,7 +154,6 @@ export const deleteItem = async (product_id:string,adminEmail:string) => {
         "Access-Control-Allow-Origin": "*" //stop fetch errors
 
     };
-
 
 
     const res = await fetch(url, {
@@ -172,7 +166,7 @@ export const deleteItem = async (product_id:string,adminEmail:string) => {
 
 
     if (!res.ok) {
-        throw (JSON.stringify(resJSON.error.message)+JSON.stringify(resJSON.error.errors))
+        throw (JSON.stringify(resJSON.error.message) + JSON.stringify(resJSON.error.errors))
     }
 
     return resJSON;

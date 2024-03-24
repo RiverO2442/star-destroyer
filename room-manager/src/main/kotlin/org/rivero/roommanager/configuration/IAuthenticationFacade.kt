@@ -1,13 +1,14 @@
-package org.rivero.roommanager.configuration;
+package org.rivero.roommanager.configuration
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
-import reactor.core.publisher.Mono;
+import org.rivero.roommanager.user.AuthUser
+import org.springframework.security.core.Authentication
+import org.springframework.security.oauth2.jwt.Jwt
+import reactor.core.publisher.Mono
 
-import java.security.Principal;
+interface IAuthenticationFacade {
+    val authentication: Mono<Authentication>
 
-public interface IAuthenticationFacade {
-    Mono<Authentication> getAuthentication();
+    val principal: Mono<Jwt>
 
-    Mono<Jwt> getPrincipal();
+    val user: Mono<AuthUser>
 }

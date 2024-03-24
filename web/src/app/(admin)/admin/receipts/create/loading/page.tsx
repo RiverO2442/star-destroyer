@@ -1,10 +1,7 @@
-import {redirect} from "next/navigation";
 import LoadingScreen from "@/components/loader";
-import {setAsset} from "@/app/(admin)/api/assets";
 import {CreateReceiptRequest, Receipt, ReceiptSummary} from "@/types/receipt";
 import {useCrudApi} from "@/app/(admin)/api/curd";
 import {useSession} from "next-auth/react";
-import {useEffect} from "react";
 
 const FormLoader = ({searchParams}: { searchParams: FormData }) => {
     const {data: session} = useSession();
