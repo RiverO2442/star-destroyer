@@ -5,15 +5,15 @@ import jakarta.xml.bind.DatatypeConverter
 import lombok.RequiredArgsConstructor
 import lombok.extern.slf4j.Slf4j
 import org.rivero.roommanager.configuration.IAuthenticationFacade
-import org.rivero.roommanager.dtos.UserInfo
 import org.rivero.roommanager.entities.User
-import org.rivero.roommanager.repositories.DBConnectionManager
-import org.rivero.roommanager.repositories.UserRepository1
-import org.rivero.roommanager.request.LoginRequest
+import org.rivero.roommanager.DBConnectionManager
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
+import java.math.BigDecimal
 import java.security.Key
 import java.util.*
 import javax.crypto.spec.SecretKeySpec
@@ -22,7 +22,6 @@ import javax.crypto.spec.SecretKeySpec
 @Service
 @RequiredArgsConstructor
 class UserService @Autowired constructor(
-    val userRepository1: UserRepository1? = null,
     val userRepository: UserRepository,
     val authenticationFacade: IAuthenticationFacade
 ) {
@@ -35,6 +34,7 @@ class UserService @Autowired constructor(
                 userRepository.save(
                     User.builder()
                         .id(it.subject)
+                        .balance(BigDecimal.ZERO)
                         .build()
                 ).id
             }
@@ -68,11 +68,12 @@ class UserService @Autowired constructor(
         userRepository.deleteById(id);
     }
 
-    fun updateOne(id: String, request: UpdateUserRequest) {
-        userRepository.findById()
+    fun update(id: String, request: UpdateUserRequest) {
+        userRepository.findById(id)
             .map {
                 userRepository.save(it)
             }
+            .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "user not found") }
     }
 
     fun authorize(token: String?): UserInfo {

@@ -1,4 +1,4 @@
-package org.rivero.roommanager.controllers;
+package org.rivero.roommanager.report;
 
 import lombok.RequiredArgsConstructor;
 import org.rivero.roommanager.entities.Report;

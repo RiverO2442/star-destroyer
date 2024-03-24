@@ -1,11 +1,6 @@
-package org.rivero.roommanager.controllers;
+package org.rivero.roommanager.receipt;
 
 import lombok.RequiredArgsConstructor;
-import org.rivero.roommanager.receipt.CreateReceiptRequest;
-import org.rivero.roommanager.receipt.ReceiptDto;
-import org.rivero.roommanager.receipt.ReceiptService;
-import org.rivero.roommanager.receipt.ReceiptSummary;
-import org.rivero.roommanager.request.ReceiptUpdateRequest;
 import org.rivero.roommanager.user.UserService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;

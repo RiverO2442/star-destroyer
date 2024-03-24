@@ -1,9 +1,6 @@
-package org.rivero.roommanager.services;
+package org.rivero.roommanager.subscription;
 
 import lombok.RequiredArgsConstructor;
-import org.rivero.roommanager.dtos.MealCheckListDto;
-import org.rivero.roommanager.repositories.MealCheckListRepository;
-import org.rivero.roommanager.request.MealCreateRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

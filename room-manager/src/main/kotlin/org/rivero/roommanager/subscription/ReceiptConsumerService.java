@@ -1,9 +1,9 @@
-package org.rivero.roommanager.services;
+package org.rivero.roommanager.subscription;
 
 import lombok.RequiredArgsConstructor;
 import org.rivero.roommanager.entities.ReceiptConsumer;
-import org.rivero.roommanager.repositories.DBConnectionManager;
-import org.rivero.roommanager.repositories.ReceiptConsumerRepository;
+import org.rivero.roommanager.DBConnectionManager;
+import org.rivero.roommanager.receipt.ReceiptConsumerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -4,13 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import lombok.RequiredArgsConstructor
 import lombok.extern.slf4j.Slf4j
 import org.rivero.roommanager.configuration.IAuthenticationFacade
-import org.rivero.roommanager.dtos.UserInfo
+import org.rivero.roommanager.user.UserInfo
 import org.rivero.roommanager.entities.Receipt
 import org.rivero.roommanager.entities.ReceiptConsumer
 import org.rivero.roommanager.entities.Report
-import org.rivero.roommanager.repositories.MoneyConsumeEventRepository
-import org.rivero.roommanager.repositories.UserRepository1
-import org.rivero.roommanager.request.ReceiptUpdateRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -27,7 +24,6 @@ import java.util.function.Consumer
 @Slf4j
 class ReceiptService @Autowired constructor(
     val moneyConsumeEventRepository: MoneyConsumeEventRepository,
-    val userRepository: UserRepository1,
     val receiptRepository: ReceiptRepository,
     val authenticationFacade: IAuthenticationFacade,
     val mapper: ObjectMapper

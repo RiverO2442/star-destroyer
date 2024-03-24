@@ -18,14 +18,15 @@ public class SecurityConfig {
     @Bean
     SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
         return httpSecurity
-                .cors(cors->cors.configurationSource(createCorsConfigSource()))
+                .cors(cors -> cors.configurationSource(createCorsConfigSource()))
 //                .csrf(ServerHttpSecurity.CsrfSpec::disable)
 //                .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .securityMatcher(new PathPatternParserServerWebExchangeMatcher("/**"))
                 .authorizeExchange(authorize -> authorize
                         .pathMatchers(HttpMethod.GET, "/webjars/**").permitAll()
                         .pathMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
-                        .anyExchange().permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/*/users/*").permitAll()
+                        .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer(it -> it.jwt(Customizer.withDefaults()))
                 .build();

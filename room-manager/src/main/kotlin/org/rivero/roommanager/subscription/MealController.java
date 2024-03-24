@@ -1,9 +1,6 @@
-package org.rivero.roommanager.controllers;
+package org.rivero.roommanager.subscription;
 
 import lombok.RequiredArgsConstructor;
-import org.rivero.roommanager.dtos.MealCheckListDto;
-import org.rivero.roommanager.request.MealCreateRequest;
-import org.rivero.roommanager.services.MealService;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

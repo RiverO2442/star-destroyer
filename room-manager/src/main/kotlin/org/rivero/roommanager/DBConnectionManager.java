@@ -1,4 +1,4 @@
-package org.rivero.roommanager.repositories;
+package org.rivero.roommanager;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;

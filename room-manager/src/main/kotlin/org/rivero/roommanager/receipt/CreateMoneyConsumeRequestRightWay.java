@@ -1,4 +1,4 @@
-package org.rivero.roommanager.dtos;
+package org.rivero.roommanager.receipt;
 
 import lombok.Data;
 

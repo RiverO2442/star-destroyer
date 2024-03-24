@@ -1,16 +1,13 @@
-package org.rivero.roommanager.repositories;
+package org.rivero.roommanager.receipt;
 
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.rivero.roommanager.entities.Receipt;
 import org.rivero.roommanager.entities.ReceiptConsumer;
-import org.rivero.roommanager.receipt.CreateReceiptRequest;
-import org.rivero.roommanager.request.ReceiptUpdateRequest;
+import org.rivero.roommanager.DBConnectionManager;
 import org.springframework.stereotype.Repository;
-import org.rivero.roommanager.receipt.ReceiptDto;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -19,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Repository

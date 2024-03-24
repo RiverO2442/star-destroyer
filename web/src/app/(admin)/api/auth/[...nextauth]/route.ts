@@ -1,6 +1,8 @@
 import NextAuth, {AuthOptions} from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
+import axios, {AxiosError, HttpStatusCode} from "axios";
+
 
 export const authOptions: AuthOptions = {
     providers: [
@@ -31,6 +33,32 @@ export const authOptions: AuthOptions = {
                 accessToken: token.accessToken
             }
         },
+        async signIn({user, account, profile, email, credentials}) {
+            console.log("Sign in: ", user, account, profile, email, credentials)
+            try {
+                await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/api/v1/users/${user.id}`)
+            } catch (error: any) {
+                error = error as AxiosError
+                if (error.response && error.response.status === HttpStatusCode.NotFound) {
+                    try {
+                        await axios.post(`${process.env.NEXT_PUBLIC_API_HOST}/api/v1/register`, null, {
+                            headers: {
+                                Authorization: `Bearer ${account?.id_token}`
+                            }
+                        })
+                    } catch (registerError: any) {
+                        registerError = registerError as AxiosError
+                        if (registerError.response.status !== HttpStatusCode.Ok) {
+                            return false;
+                        }
+                    }
+                } else {
+                    console.error('Register error:', error.message);
+                    return false;
+                }
+            }
+            return true;
+        }
     },
     pages: {
         signIn: "/signin",

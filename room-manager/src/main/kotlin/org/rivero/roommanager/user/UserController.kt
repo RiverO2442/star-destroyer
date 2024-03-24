@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor
 import org.rivero.roommanager.entities.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.util.*
 
 @RestController
 @RequestMapping("/api/v1")
@@ -40,6 +39,7 @@ class UserController @Autowired constructor(
     @GetMapping("/users/{id}")
     fun getUserById(@PathVariable(name = "id") id: String): Mono<UserDto> {
         return Mono.justOrEmpty(userRepository.findById(id))
+            .switchIfEmpty(Mono.error(ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")))
             .map { it!! }
             .map { u -> UserDto(u.id, u.name) }
     }
@@ -47,14 +47,12 @@ class UserController @Autowired constructor(
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun updateUser(
-        @PathVariable(name = "id") id: String?,
-        @RequestBody user: UpdateUserRequest?
-    ): ResponseEntity<String> {
+        @PathVariable(name = "id") id: String,
+        @RequestBody request: UpdateUserRequest
+    ): Mono<Any> {
         return Mono.just(
-            userService.update()
+            userService.update(id, request)
         )
-        userService.updateOne(user, id)
-        return ResponseEntity.ok().build()
     }
 
     @DeleteMapping("/users/{id}")

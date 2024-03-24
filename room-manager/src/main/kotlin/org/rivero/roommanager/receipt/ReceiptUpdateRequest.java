@@ -1,4 +1,4 @@
-package org.rivero.roommanager.request;
+package org.rivero.roommanager.receipt;
 
 import java.util.List;
 

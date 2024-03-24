@@ -19,7 +19,7 @@ public class User {
     @Id
     String id;
     String name;
-    BigDecimal balance = BigDecimal.ZERO;
+    BigDecimal balance;
     int debt;
     int role;
 
